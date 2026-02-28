@@ -314,7 +314,7 @@ function S1_Pain() {
   const [revealed,setRevealed]=useState({});
   const toggle=(i)=>{sfxSelect();setRevealed(p=>({...p,[i]:!p[i]}));};
   const walls=[
-    {title:"足場コストが利益を削る",       detail:"設置・解体に数週間 & 数百万円。工法の難易度が上がるほど足場代が膨らみ、利益率が見えにくくなる。"},
+    {title:"足場前提だと、選べる工法が一気に減る",       detail:"設置・解体に数週間 & 数百万円。工法の難易度が上がるほど足場代が膨らみ、利益率が見えにくくなる。"},
     {title:"クレーンが届かない現場は諦める", detail:"山間部・急斜面・狭小地。重機が入れなければ施工不可。「対応できない」という判断が入札機会を逃す。"},
     {title:"足場解体まで次工程が動かない",  detail:"並行作業ができないため全体工期が伸びる。災害復旧の緊急現場では、この「待ち時間」が最大のリスクになる。"},
   ];
@@ -382,6 +382,9 @@ function S3_Position() {
   return (
     <Shell>
       <Label>POSITION ── どの工法を使うべきか、一緒に確認します</Label>
+      <div style={{fontFamily:VB,fontSize:"clamp(.82rem,3vw,.95rem)",color:"rgba(93,117,88,.55)",lineHeight:1.75,marginBottom:"clamp(.6rem,2vw,.9rem)",borderLeft:"2px solid rgba(28,74,24,.1)",paddingLeft:".75rem"}}>
+        ※ 今日は「どの工法が正しいか」を決める場ではなく、<br/>どこで判断が分かれるかを整理するだけです。
+      </div>
       {step>0&&step<5&&(
         <div style={{display:"flex",gap:".4rem",marginBottom:"clamp(.75rem,3vw,1.25rem)",animation:"fadeIn .3s ease",flexWrap:"wrap"}}>
           {stepLabels.map((l,i)=>(
@@ -650,7 +653,7 @@ function S9_Close({ checks }) {
               ))}
             </div>
             <div style={{marginTop:"1rem",fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.forest,lineHeight:1.6,borderTop:"1px solid rgba(28,74,24,.1)",paddingTop:".75rem",fontWeight:500}}>
-              次回は、具体的な現場でシミュレーションしましょう。
+              次回は、判断が分かれそうな現場条件だけ整理しましょう。
             </div>
           </div>
         ):(
