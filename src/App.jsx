@@ -337,10 +337,10 @@ function S1_Pain() {
 function S2_Solution() {
   const [active, setActive] = useState(null);
   const photos = [
-    { src:"/photos/01_douro.jpg",   title:"道路補強工事",           cap:"無足場アンカー工法 // 施工状況" },
-    { src:"/photos/02_nomen.jpg",   title:"法面補強工事",           cap:"鉄筋挿入工 // 削孔状況" },
+    { src:"/photos/01_douro.jpg",   title:"道路補強工事事例",           cap:"無足場アンカー工法 // 施工状況" },
+    { src:"/photos/02_nomen.jpg",   title:"法面補強工事事例",           cap:"鉄筋挿入工 // 削孔状況" },
     { src:"/photos/03_anchor1.jpg", title:"グランドアンカー施工事例", cap:"アンカー工 // 無足場削孔機" },
-    { src:"/photos/04_anchor2.jpg", title:"グランドアンカー施工風景", cap:"アンカー工 // 削孔状況" },
+    { src:"/photos/04_anchor2.jpg", title:"グランドアンカー施工事例", cap:"アンカー工 // 削孔状況" },
   ];
   return (
     <Shell>
@@ -417,7 +417,7 @@ function S3_Position() {
       {step===0&&(
         <div style={{animation:"fadeIn .4s ease"}}>
           <div style={{fontFamily:VB,fontSize:"clamp(1.2rem,5vw,2rem)",color:C.text,fontWeight:700,lineHeight:1.35,marginBottom:"clamp(1rem,4vw,1.5rem)"}}>
-            「なぜ無足場なのか」を<br/><span style={{color:C.forest}}>相手と一緒に確認します。</span>
+            「なぜ無足場なのか」を<br/><span style={{color:C.forest}}>一緒に確認します。</span>
           </div>
           <button onClick={()=>{sfxSelect();setStep(1);}} style={{width:"100%",border:"1px solid rgba(28,74,24,.28)",background:"rgba(28,74,24,.06)",color:C.forest,fontFamily:V,fontSize:"clamp(.85rem,3.2vw,1rem)",padding:"clamp(.85rem,3.5vw,1.1rem)",cursor:"pointer",letterSpacing:".1em",WebkitTapHighlightColor:"transparent",transition:"all .2s"}}>
             ▶ 判定スタート（4問）
