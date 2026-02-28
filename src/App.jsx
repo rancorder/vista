@@ -615,7 +615,7 @@ function S8_Hearing({ checks, onCheck }) {
   const count=Object.values(checks).filter(Boolean).length;
   return (
     <Shell>
-      <Label>HEARING ── 御社の現場を確認させてください</Label>
+      <Label>HEARING ── 貴社の現場を確認させてください</Label>
       <div style={{fontFamily:VB,fontSize:"clamp(1.1rem,4.5vw,1.7rem)",color:C.text,fontWeight:700,lineHeight:1.35,marginBottom:"clamp(.75rem,3vw,1.25rem)"}}>
         当てはまるものを<br/><span style={{color:C.forest}}>タップしてください。</span>
       </div>
