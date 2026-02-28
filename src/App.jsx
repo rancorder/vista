@@ -397,7 +397,7 @@ function S3_Position() {
       {step===0&&(
         <div style={{animation:"fadeIn .4s ease"}}>
           <div style={{fontFamily:VB,fontSize:"clamp(1.2rem,5vw,2rem)",color:C.text,fontWeight:700,lineHeight:1.35,marginBottom:"clamp(1rem,4vw,1.5rem)"}}>
-            「なぜ無足場なのか」を<br/><span style={{color:C.forest}}>相手と一緒に確認します。</span>
+            「なぜ無足場なのか」を<br/><span style={{color:C.forest}}>一緒に確認します。</span>
           </div>
           <div style={{border:"1px solid rgba(28,74,24,.12)",background:C.surface,padding:"clamp(.85rem,3.5vw,1.2rem)",marginBottom:"clamp(.75rem,3vw,1.25rem)",boxShadow:"0 1px 6px rgba(28,74,24,.06)"}}>
             <div style={{fontFamily:V,fontSize:"clamp(.6rem,2vw,.7rem)",color:"rgba(28,74,24,.38)",letterSpacing:".15em",marginBottom:".75rem"}}>工法選択ツリー</div>
