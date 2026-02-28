@@ -337,10 +337,10 @@ function S1_Pain() {
 function S2_Solution() {
   const [active, setActive] = useState(null);
   const photos = [
-    { src:"/photos/01_douro.jpg",   title:"道路補強工事事例",           cap:"無足場アンカー工法 // 施工状況" },
-    { src:"/photos/02_nomen.jpg",   title:"法面補強工事事例",           cap:"鉄筋挿入工 // 削孔状況" },
+    { src:"/photos/01_douro.jpg",   title:"道路補強工事",           cap:"無足場アンカー工法 // 施工状況" },
+    { src:"/photos/02_nomen.jpg",   title:"法面補強工事",           cap:"鉄筋挿入工 // 削孔状況" },
     { src:"/photos/03_anchor1.jpg", title:"グランドアンカー施工事例", cap:"アンカー工 // 無足場削孔機" },
-    { src:"/photos/04_anchor2.jpg", title:"グランドアンカー施工事例", cap:"アンカー工 // 削孔状況" },
+    { src:"/photos/04_anchor2.jpg", title:"グランドアンカー施工風景", cap:"アンカー工 // 削孔状況" },
   ];
   return (
     <Shell>
@@ -417,7 +417,7 @@ function S3_Position() {
       {step===0&&(
         <div style={{animation:"fadeIn .4s ease"}}>
           <div style={{fontFamily:VB,fontSize:"clamp(1.2rem,5vw,2rem)",color:C.text,fontWeight:700,lineHeight:1.35,marginBottom:"clamp(1rem,4vw,1.5rem)"}}>
-            「なぜ無足場なのか」を<br/><span style={{color:C.forest}}>一緒に確認します。</span>
+            「なぜ無足場なのか」を<br/><span style={{color:C.forest}}>相手と一緒に確認します。</span>
           </div>
           <button onClick={()=>{sfxSelect();setStep(1);}} style={{width:"100%",border:"1px solid rgba(28,74,24,.28)",background:"rgba(28,74,24,.06)",color:C.forest,fontFamily:V,fontSize:"clamp(.85rem,3.2vw,1rem)",padding:"clamp(.85rem,3.5vw,1.1rem)",cursor:"pointer",letterSpacing:".1em",WebkitTapHighlightColor:"transparent",transition:"all .2s"}}>
             ▶ 判定スタート（4問）
@@ -570,8 +570,8 @@ function S6_FAQ() {
 function S7_Scope() {
   const [open,setOpen]=useState(null);
   const services=[
-    {id:"anchor",icon:"⚓",title:"無足場アンカー工法",  sub:"SLOPE ANCHOR // 法面安定・地すべり抑止",    color:C.forest,detail:"グランドアンカー工・鉄筋挿入工。足場不要のワイヤー緊張方式（特許）により、急斜面・山間部・崩れやすい地盤でも安全・迅速に施工。",benefit:"他社が断る現場こそ、ビスタの出番。緊急対応・難工事に対応します。",images:["無足場工法 施工写真①","無足場工法 施工写真②"]},
-    {id:"wood",  icon:"🌲",title:"木製構造物工法",      sub:"WOOD STRUCTURE // ガードレール・ウッド筋工",color:C.wood, detail:"木製ガードレール「木景（こかげ）」・木製ガードフェンス・ウッド筋工。性能確認試験に合格した安全性と、景観・環境に配慮した素材を両立。",benefit:"SDGs・景観条例エリアの案件、地域材活用のニーズに応えます。",images:["木製構造物 施工写真①"]},
+    {id:"anchor",icon:"⚓",title:"無足場アンカー工法",  sub:"SLOPE ANCHOR // 法面安定・地すべり抑止",    color:C.forest,detail:"グランドアンカー工・鉄筋挿入工。足場不要のワイヤー緊張方式（特許）により、急斜面・山間部・崩れやすい地盤でも安全・迅速に施工。",benefit:"他社が断る現場こそ、ビスタの出番。緊急対応・難工事に対応します。",images:[{src:"/photos/05_road.jpg",label:"道路補強工事"},{src:"/photos/06_rinkan.jpg",label:"林間・法面施工"}]},
+    {id:"wood",  icon:"🌲",title:"木製構造物工法",      sub:"WOOD STRUCTURE // ガードレール・ウッド筋工",color:C.wood, detail:"木製ガードレール「木景（こかげ）」・木製ガードフェンス・ウッド筋工。性能確認試験に合格した安全性と、景観・環境に配慮した素材を両立。",benefit:"SDGs・景観条例エリアの案件、地域材活用のニーズに応えます。",images:[{src:null,label:"木製構造物 施工写真①"}]},
   ];
   return (
     <Shell>
@@ -593,7 +593,14 @@ function S7_Scope() {
             {open===s.id&&(
               <div style={{padding:"clamp(.9rem,3.5vw,1.25rem) clamp(1rem,4vw,1.5rem)",borderLeft:"3px solid "+s.color,borderRight:"1px solid rgba(28,74,24,.1)",borderBottom:"1px solid rgba(28,74,24,.1)",background:"rgba(28,74,24,.03)",animation:"fadeIn .25s ease"}}>
                 <div style={{display:"grid",gridTemplateColumns:`repeat(${s.images.length>1?"2":"1"},1fr)`,gap:".5rem",marginBottom:"1rem"}}>
-                  {s.images.map((label,j)=><ImageSlot key={j} label={label} aspectRatio="60%"/>)}
+                  {s.images.map((img,j)=>
+                    img.src
+                      ? <div key={j}>
+                          <div style={{fontFamily:VB,fontSize:"clamp(.72rem,2.5vw,.82rem)",color:C.text,fontWeight:600,marginBottom:".3rem"}}>{img.label}</div>
+                          <img src={img.src} alt={img.label} style={{width:"100%",aspectRatio:"4/3",objectFit:"cover",display:"block",border:"1px solid rgba(28,74,24,.1)"}}/>
+                        </div>
+                      : <ImageSlot key={j} label={img.label} aspectRatio="60%"/>
+                  )}
                 </div>
                 <div style={{fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.muted,lineHeight:1.85,marginBottom:".75rem"}}>{s.detail}</div>
                 <div style={{display:"flex",alignItems:"flex-start",gap:".6rem",padding:".65rem .9rem",background:"rgba(28,74,24,.06)",border:"1px solid rgba(28,74,24,.14)"}}>
