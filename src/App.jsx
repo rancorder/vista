@@ -397,7 +397,7 @@ function S3_Position() {
       {step===0&&(
         <div style={{animation:"fadeIn .4s ease"}}>
           <div style={{fontFamily:VB,fontSize:"clamp(1.2rem,5vw,2rem)",color:C.text,fontWeight:700,lineHeight:1.35,marginBottom:"clamp(1rem,4vw,1.5rem)"}}>
-            「なぜ無足場なのか」を<br/><span style={{color:C.forest}}>一緒に確認します。</span>
+            「なぜ無足場なのか」を<br/><span style={{color:C.forest}}>相手と一緒に確認します。</span>
           </div>
           <div style={{border:"1px solid rgba(28,74,24,.12)",background:C.surface,padding:"clamp(.85rem,3.5vw,1.2rem)",marginBottom:"clamp(.75rem,3vw,1.25rem)",boxShadow:"0 1px 6px rgba(28,74,24,.06)"}}>
             <div style={{fontFamily:V,fontSize:"clamp(.6rem,2vw,.7rem)",color:"rgba(28,74,24,.38)",letterSpacing:".15em",marginBottom:".75rem"}}>工法選択ツリー</div>
@@ -615,11 +615,11 @@ function S8_Hearing({ checks, onCheck }) {
   const count=Object.values(checks).filter(Boolean).length;
   return (
     <Shell>
-      <Label>HEARING ── 貴社の現場を確認させてください</Label>
+      <Label>HEARING ── まず、貴社の現場について聞かせてください</Label>
       <div style={{fontFamily:VB,fontSize:"clamp(1.1rem,4.5vw,1.7rem)",color:C.text,fontWeight:700,lineHeight:1.35,marginBottom:"clamp(.75rem,3vw,1.25rem)"}}>
         当てはまるものを<br/><span style={{color:C.forest}}>タップしてください。</span>
       </div>
-      {count>0&&<div style={{fontFamily:V,fontSize:"clamp(.62rem,2vw,.72rem)",color:C.forest,letterSpacing:".1em",marginBottom:"clamp(.5rem,2vw,.75rem)",animation:"fadeIn .3s ease"}}>{count}項目 該当 ── 次のスライドで確認できます</div>}
+      {count>0&&<div style={{fontFamily:V,fontSize:"clamp(.62rem,2vw,.72rem)",color:C.forest,letterSpacing:".1em",marginBottom:"clamp(.5rem,2vw,.75rem)",animation:"fadeIn .3s ease"}}>{count}項目 確認 ── この内容をもとに説明します</div>}
       <div style={{display:"flex",flexDirection:"column",gap:"clamp(.35rem,1.5vw,.5rem)"}}>
         {items.map(it=><CheckItem key={it.id} id={it.id} label={it.label} sub={it.sub} checked={!!checks[it.id]} onChange={onCheck}/>)}
       </div>
@@ -677,7 +677,7 @@ function S9_Close({ checks }) {
 
 /* ═══════════════════ APP ═══════════════════ */
 const TOTAL  = 10;
-const LABELS = ["BOOT","PAIN","SOLUTION","POSITION","STRENGTH","PROOF","FAQ","SCOPE","HEARING","CLOSE"];
+const LABELS = ["BOOT","HEARING","PAIN","SOLUTION","POSITION","STRENGTH","PROOF","FAQ","SCOPE","CLOSE"];
 
 export default function App() {
   const [idx,setIdx]=useState(0);
@@ -708,9 +708,9 @@ export default function App() {
   const handleAreaClick=(e)=>{if(e.target.closest("button")||e.target.closest("a"))return;if(isMobile)go(idx+1);};
 
   const renderSlide=()=>{switch(idx){
-    case 0:return<S0_Boot/>;case 1:return<S1_Pain/>;case 2:return<S2_Solution/>;case 3:return<S3_Position/>;
-    case 4:return<S4_Strength/>;case 5:return<S5_Proof/>;case 6:return<S6_FAQ/>;case 7:return<S7_Scope/>;
-    case 8:return<S8_Hearing checks={checks} onCheck={handleCheck}/>;case 9:return<S9_Close checks={checks}/>;
+    case 0:return<S0_Boot/>;case 1:return<S8_Hearing checks={checks} onCheck={handleCheck}/>;case 2:return<S1_Pain/>;
+    case 3:return<S2_Solution/>;case 4:return<S3_Position/>;case 5:return<S4_Strength/>;case 6:return<S5_Proof/>;
+    case 7:return<S6_FAQ/>;case 8:return<S7_Scope/>;case 9:return<S9_Close checks={checks}/>;
     default:return null;
   }};
 
