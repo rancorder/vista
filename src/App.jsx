@@ -594,7 +594,7 @@ function S7_FAQ() {
 function S8_Scope() {
   const [open,setOpen]=useState(null);
   const services=[
-    {id:"anchor",icon:"⚓",title:"無足場アンカー工法",  sub:"SLOPE ANCHOR // 法面安定・地すべり抑止",    color:C.forest,detail:"グランドアンカー工・鉄筋挿入工。足場不要のワイヤー緊張方式（特許）により、急斜面・山間部・崩れやすい地盤でも安全・迅速に施工。",benefit:"他社が断る現場こそ、ビスタの出番。緊急対応・難工事に対応します。",images:[{src:null,label:"道路補強工事"},{src:null,label:"林間・法面施工"}]},
+    {id:"anchor",icon:"⚓",title:"無足場アンカー工法",  sub:"SLOPE ANCHOR // 法面安定・地すべり抑止",    color:C.forest,detail:"グランドアンカー工・鉄筋挿入工。足場不要のワイヤー緊張方式（特許）により、急斜面・山間部・崩れやすい地盤でも安全・迅速に施工。",benefit:"他社が断る現場こそ、ビスタの出番。緊急対応・難工事に対応します。",images:[{src:"/photos/05_road.jpg",label:"道路補強工事"},{src:"/photos/06_rinkan.jpg",label:"林間・法面施工"}]},
     {id:"wood",  icon:"🌲",title:"木製構造物工法",      sub:"WOOD STRUCTURE // ガードレール・ウッド筋工",color:C.wood, detail:"木製ガードレール「木景（こかげ）」・木製ガードフェンス・ウッド筋工。性能確認試験に合格した安全性と、景観・環境に配慮した素材を両立。",benefit:"SDGs・景観条例エリアの案件、地域材活用のニーズに応えます。",images:[{src:null,label:"木製構造物 施工写真①"}]},
   ];
   return (
@@ -617,7 +617,13 @@ function S8_Scope() {
             {open===s.id&&(
               <div style={{padding:"clamp(.9rem,3.5vw,1.25rem) clamp(1rem,4vw,1.5rem)",borderLeft:"3px solid "+s.color,borderRight:"1px solid rgba(28,74,24,.1)",borderBottom:"1px solid rgba(28,74,24,.1)",background:"rgba(28,74,24,.03)",animation:"fadeIn .25s ease"}}>
                 <div style={{display:"grid",gridTemplateColumns:`repeat(${s.images.length>1?"2":"1"},1fr)`,gap:".5rem",marginBottom:"1rem"}}>
-                  {s.images.map((img,j)=><ImageSlot key={j} label={img.label} aspectRatio="60%"/>)}
+                  {s.images.map((img,j)=>img.src
+                    ? <div key={j}>
+                        <div style={{fontFamily:VB,fontSize:"clamp(.72rem,2.5vw,.82rem)",color:C.text,fontWeight:600,marginBottom:".3rem"}}>{img.label}</div>
+                        <img src={img.src} alt={img.label} style={{width:"100%",aspectRatio:"4/3",objectFit:"cover",display:"block",border:"1px solid rgba(28,74,24,.1)"}}/>
+                      </div>
+                    : <ImageSlot key={j} label={img.label} aspectRatio="60%"/>
+                  )}
                 </div>
                 <div style={{fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.muted,lineHeight:1.85,marginBottom:".75rem",fontWeight:500}}>{s.detail}</div>
                 <div style={{display:"flex",alignItems:"flex-start",gap:".6rem",padding:".65rem .9rem",background:"rgba(28,74,24,.06)",border:"1px solid rgba(28,74,24,.14)"}}>
