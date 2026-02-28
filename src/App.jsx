@@ -106,7 +106,7 @@ function MiniDots({ cur, total }) {
   );
 }
 
-/* ─── ForestBg: parchment + topographic contour lines ─── */
+/* ─── ForestBg ─── */
 function ForestBg() {
   return (
     <div style={{position:"fixed",inset:0,zIndex:0,pointerEvents:"none",overflow:"hidden"}}>
@@ -156,15 +156,15 @@ function Label({ children }) {
 /* ─── WallCard ─── */
 function WallCard({ num, title, detail, revealed, onReveal }) {
   return (
-    <div onClick={onReveal} style={{border:"1px solid "+(revealed?"rgba(28,74,24,.3)":"rgba(28,74,24,.1)"),background:revealed?"rgba(28,74,24,.04)":C.surface,padding:"clamp(.9rem,3.5vw,1.25rem) clamp(1rem,4vw,1.5rem)",cursor:"pointer",position:"relative",transition:"all .3s",WebkitTapHighlightColor:"transparent",boxShadow:revealed?"none":"0 1px 4px rgba(28,74,24,.06)"}}>
+    <div onClick={e=>{e.stopPropagation();onReveal();}} style={{border:"1px solid "+(revealed?"rgba(28,74,24,.3)":"rgba(28,74,24,.1)"),background:revealed?"rgba(28,74,24,.04)":C.surface,padding:"clamp(.9rem,3.5vw,1.25rem) clamp(1rem,4vw,1.5rem)",cursor:"pointer",position:"relative",transition:"all .3s",WebkitTapHighlightColor:"transparent",boxShadow:revealed?"none":"0 1px 4px rgba(28,74,24,.06)"}}>
       {revealed && <Corners color={C.forest} size={14} t={1.5}/>}
       <div style={{display:"flex",alignItems:"flex-start",gap:"clamp(.75rem,3vw,1.25rem)"}}>
         <div style={{fontFamily:V,fontSize:"clamp(.72rem,2.4vw,.82rem)",color:revealed?C.forest:C.sage,background:revealed?"rgba(28,74,24,.08)":"rgba(28,74,24,.04)",border:"1px solid "+(revealed?"rgba(28,74,24,.25)":"rgba(28,74,24,.1)"),width:"clamp(28px,8vw,36px)",height:"clamp(28px,8vw,36px)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,transition:"all .3s"}}>
           {String(num).padStart(2,"0")}
         </div>
         <div style={{flex:1}}>
-          <div style={{fontFamily:VB,fontSize:"clamp(1rem,4vw,1.3rem)",color:revealed?C.text:C.sage,fontWeight:600,lineHeight:1.3,transition:"color .3s"}}>{title}</div>
-          {revealed && <div style={{fontFamily:VB,fontSize:"clamp(.82rem,3vw,.95rem)",color:C.muted,lineHeight:1.75,marginTop:".5rem",animation:"fadeIn .4s ease"}}>{detail}</div>}
+          <div style={{fontFamily:VB,fontSize:"clamp(1rem,4vw,1.3rem)",color:revealed?C.text:C.sage,fontWeight:700,lineHeight:1.3,transition:"color .3s"}}>{title}</div>
+          {revealed && <div style={{fontFamily:VB,fontSize:"clamp(.82rem,3vw,.95rem)",color:C.muted,lineHeight:1.75,marginTop:".5rem",animation:"fadeIn .4s ease",fontWeight:500}}>{detail}</div>}
         </div>
         <div style={{fontFamily:V,fontSize:".72rem",color:"rgba(28,74,24,.22)",flexShrink:0,transition:"transform .3s",transform:revealed?"rotate(90deg)":"none"}}>▶</div>
       </div>
@@ -180,18 +180,18 @@ function AccordionRow({ icon, title, sub, detail, benefit, color, open, onToggle
       <button onClick={()=>{sfxSelect();onToggle();}} style={{width:"100%",textAlign:"left",background:open?"rgba(28,74,24,.05)":C.surface,border:"1px solid "+(open?"rgba(28,74,24,.28)":"rgba(28,74,24,.1)"),padding:"clamp(.8rem,3vw,1.1rem) clamp(.9rem,3.5vw,1.3rem)",display:"flex",alignItems:"center",gap:"clamp(.6rem,2vw,1rem)",cursor:"pointer",transition:"all .2s",WebkitTapHighlightColor:"transparent",boxShadow:open?"none":"0 1px 3px rgba(28,74,24,.05)"}}>
         <div style={{fontSize:"clamp(1.1rem,4vw,1.4rem)",flexShrink:0}}>{icon}</div>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontFamily:VB,fontSize:"clamp(1rem,3.8vw,1.25rem)",color:open?c:C.text,fontWeight:600,lineHeight:1.2}}>{title}</div>
+          <div style={{fontFamily:VB,fontSize:"clamp(1rem,3.8vw,1.25rem)",color:open?c:C.text,fontWeight:700,lineHeight:1.2}}>{title}</div>
           {sub && <div style={{fontFamily:V,fontSize:"clamp(.62rem,2vw,.72rem)",color:C.sage,marginTop:".2rem"}}>{sub}</div>}
         </div>
         <div style={{fontFamily:V,color:open?c:"rgba(28,74,24,.28)",fontSize:".85rem",flexShrink:0,transition:"transform .2s",transform:open?"rotate(90deg)":"none"}}>▶</div>
       </button>
       {open && (
         <div style={{padding:"clamp(.9rem,3.5vw,1.25rem) clamp(1rem,4vw,1.5rem)",borderLeft:"3px solid "+c,borderRight:"1px solid rgba(28,74,24,.1)",borderBottom:"1px solid rgba(28,74,24,.1)",background:"rgba(28,74,24,.03)",animation:"fadeIn .25s ease"}}>
-          {detail && <div style={{fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.muted,lineHeight:1.85,marginBottom:".75rem"}}>{detail}</div>}
+          {detail && <div style={{fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.muted,lineHeight:1.85,marginBottom:".75rem",fontWeight:500}}>{detail}</div>}
           {benefit && (
             <div style={{display:"flex",alignItems:"flex-start",gap:".6rem",padding:".65rem .9rem",background:"rgba(28,74,24,.06)",border:"1px solid rgba(28,74,24,.15)"}}>
               <span style={{color:c,fontFamily:V,flexShrink:0,marginTop:".1rem"}}>✓</span>
-              <div style={{fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.forest,lineHeight:1.6,fontWeight:500}}>{benefit}</div>
+              <div style={{fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.forest,lineHeight:1.6,fontWeight:600}}>{benefit}</div>
             </div>
           )}
         </div>
@@ -203,19 +203,19 @@ function AccordionRow({ icon, title, sub, detail, benefit, color, open, onToggle
 /* ─── CheckItem ─── */
 function CheckItem({ id, label, sub, checked, onChange }) {
   return (
-    <div onClick={()=>{sfxSelect();onChange(id);}} style={{display:"flex",alignItems:"flex-start",gap:"clamp(.75rem,3vw,1rem)",padding:"clamp(.85rem,3.5vw,1.1rem) clamp(.9rem,3.5vw,1.25rem)",border:"1px solid "+(checked?"rgba(28,74,24,.28)":"rgba(28,74,24,.1)"),background:checked?"rgba(28,74,24,.05)":C.surface,cursor:"pointer",transition:"all .2s",WebkitTapHighlightColor:"transparent",boxShadow:checked?"none":"0 1px 3px rgba(28,74,24,.04)"}}>
+    <div onClick={e=>{e.stopPropagation();sfxSelect();onChange(id);}} style={{display:"flex",alignItems:"flex-start",gap:"clamp(.75rem,3vw,1rem)",padding:"clamp(.85rem,3.5vw,1.1rem) clamp(.9rem,3.5vw,1.25rem)",border:"1px solid "+(checked?"rgba(28,74,24,.28)":"rgba(28,74,24,.1)"),background:checked?"rgba(28,74,24,.05)":C.surface,cursor:"pointer",transition:"all .2s",WebkitTapHighlightColor:"transparent",boxShadow:checked?"none":"0 1px 3px rgba(28,74,24,.04)"}}>
       <div style={{width:"clamp(18px,5vw,22px)",height:"clamp(18px,5vw,22px)",border:"1.5px solid "+(checked?C.forest:"rgba(28,74,24,.22)"),background:checked?C.forest:"transparent",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,marginTop:"clamp(.1rem,.5vw,.15rem)",transition:"all .2s"}}>
         {checked && <span style={{color:"#fff",fontSize:"clamp(.6rem,2vw,.75rem)",fontWeight:800}}>✓</span>}
       </div>
       <div style={{flex:1}}>
-        <div style={{fontFamily:VB,fontSize:"clamp(.9rem,3.5vw,1.1rem)",color:checked?C.text:C.sage,fontWeight:checked?600:400,lineHeight:1.3,transition:"color .2s"}}>{label}</div>
-        {sub && <div style={{fontFamily:VB,fontSize:"clamp(.75rem,2.8vw,.85rem)",color:"rgba(93,117,88,.42)",marginTop:".2rem"}}>{sub}</div>}
+        <div style={{fontFamily:VB,fontSize:"clamp(.9rem,3.5vw,1.1rem)",color:checked?C.text:C.sage,fontWeight:checked?700:500,lineHeight:1.3,transition:"color .2s"}}>{label}</div>
+        {sub && <div style={{fontFamily:VB,fontSize:"clamp(.75rem,2.8vw,.85rem)",color:"rgba(93,117,88,.42)",marginTop:".2rem",fontWeight:500}}>{sub}</div>}
       </div>
     </div>
   );
 }
 
-/* ─── SlopeSVG: light/forest theme ─── */
+/* ─── SlopeSVG ─── */
 function SlopeSVG() {
   return (
     <svg viewBox="0 0 320 160" style={{width:"100%",maxWidth:480,height:"auto",display:"block",margin:"0 auto"}} aria-label="無足場アンカー工法 概念図">
@@ -233,7 +233,6 @@ function SlopeSVG() {
       ))}
       <polygon points="0,160 320,160 320,60 60,160" fill="url(#groundG)" opacity="0.95"/>
       <line x1="60" y1="160" x2="320" y2="60" stroke="rgba(45,82,38,.4)" strokeWidth="1.5"/>
-      {[0,1,2,3].map(i=>(<line key={i} x1={90+i*50} y1={158} x2={90+i*50} y2={142} stroke="rgba(255,255,255,.18)" strokeWidth="0.6"/>))}
       {[{x:120,y:138,a:-35},{x:175,y:118,a:-38},{x:230,y:98,a:-40},{x:285,y:78,a:-38}].map((a,i)=>(
         <g key={i} transform={`rotate(${a.a},${a.x},${a.y})`}>
           <line x1={a.x} y1={a.y} x2={a.x} y2={a.y+32} stroke="#7c5c3a" strokeWidth="2.5"/>
@@ -283,7 +282,7 @@ function S0_Boot() {
     const t1=setTimeout(()=>setPhase(1),700);
     const t2=setTimeout(()=>setPhase(2),1800);
     const t3=setTimeout(()=>setPhase(3),3000);
-    return()=>{clearTimeout(t1);clearTimeout(t2);clearTimeout(t3);};
+    return () =>{clearTimeout(t1);clearTimeout(t2);clearTimeout(t3);};
   },[]);
   return (
     <Shell>
@@ -310,11 +309,36 @@ function S0_Boot() {
   );
 }
 
-function S1_Pain() {
+function S1_Hearing({ checks, onCheck }) {
+  const items=[
+    {id:"slope",   label:"法面・アンカー案件が年間ある",            sub:"グランドアンカー工・鉄筋挿入工など"},
+    {id:"disaster",label:"災害復旧・緊急対応の案件がある",           sub:"豪雨・地震・地すべりなど"},
+    {id:"access",  label:"クレーン・足場が入りにくい現場がある",     sub:"山間部・急斜面・狭小地など"},
+    {id:"eco",     label:"環境制約・景観条例のある現場がある",       sub:"伐採不可・SDGs対応が必要な現場"},
+    {id:"neighbor",label:"近隣住民との境界・騒音トラブルがある",     sub:"足場の越境・振動・粉塵クレームなど"},
+    {id:"rework",  label:"工程の手戻りで工期遅延が起きたことがある", sub:"想定外の地盤・天候・施工条件の変化など"},
+    {id:"partner", label:"協力会社の手配に困っている",               sub:"人手不足・技術者が見つからないなど"},
+  ];
+  const count=Object.values(checks).filter(Boolean).length;
+  return (
+    <Shell>
+      <Label>HEARING ── まず、貴社の現場について聞かせてください</Label>
+      <div style={{fontFamily:VB,fontSize:"clamp(1.1rem,4.5vw,1.7rem)",color:C.text,fontWeight:700,lineHeight:1.35,marginBottom:"clamp(.75rem,3vw,1.25rem)"}}>
+        当てはまるものを<br/><span style={{color:C.forest}}>タップしてください。</span>
+      </div>
+      {count>0&&<div style={{fontFamily:V,fontSize:"clamp(.62rem,2vw,.72rem)",color:C.forest,letterSpacing:".1em",marginBottom:"clamp(.5rem,2vw,.75rem)",animation:"fadeIn .3s ease"}}>{count}項目 確認 ── この内容をもとに説明します</div>}
+      <div style={{display:"flex",flexDirection:"column",gap:"clamp(.35rem,1.5vw,.5rem)"}}>
+        {items.map(it=><CheckItem key={it.id} id={it.id} label={it.label} sub={it.sub} checked={!!checks[it.id]} onChange={onCheck}/>)}
+      </div>
+    </Shell>
+  );
+}
+
+function S2_Pain() {
   const [revealed,setRevealed]=useState({});
   const toggle=(i)=>{sfxSelect();setRevealed(p=>({...p,[i]:!p[i]}));};
   const walls=[
-    {title:"足場前提だと、選べる工法が一気に減る",       detail:"設置・解体に数週間 & 数百万円。工法の難易度が上がるほど足場代が膨らみ、利益率が見えにくくなる。"},
+    {title:"足場前提だと、選べる工法が一気に減る",       detail:"足場ありきで設計が始まると、工程・機材・判断すべてが固定される。現場の条件が変わっても「足場を外す」という選択肢がそもそも机に乗らない。"},
     {title:"クレーンが届かない現場は諦める", detail:"山間部・急斜面・狭小地。重機が入れなければ施工不可。「対応できない」という判断が入札機会を逃す。"},
     {title:"足場解体まで次工程が動かない",  detail:"並行作業ができないため全体工期が伸びる。災害復旧の緊急現場では、この「待ち時間」が最大のリスクになる。"},
   ];
@@ -334,11 +358,11 @@ function S1_Pain() {
   );
 }
 
-function S2_Solution() {
+function S3_Solution() {
   const [active, setActive] = useState(null);
   const photos = [
-    { src:"/photos/01_douro.jpg",   title:"道路補強工事",           cap:"無足場アンカー工法 // 施工状況" },
-    { src:"/photos/02_nomen.jpg",   title:"法面補強工事",           cap:"鉄筋挿入工 // 削孔状況" },
+    { src:"/photos/01_douro.jpg",   title:"道路補強工事",            cap:"無足場アンカー工法 // 施工状況" },
+    { src:"/photos/02_nomen.jpg",   title:"法面補強工事",            cap:"鉄筋挿入工 // 削孔状況" },
     { src:"/photos/03_anchor1.jpg", title:"グランドアンカー施工事例", cap:"アンカー工 // 無足場削孔機" },
     { src:"/photos/04_anchor2.jpg", title:"グランドアンカー施工風景", cap:"アンカー工 // 削孔状況" },
   ];
@@ -351,8 +375,8 @@ function S2_Solution() {
       {/* 2×2 photo grid */}
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"clamp(.35rem,1.5vw,.5rem)",marginBottom:"clamp(.75rem,3vw,1.1rem)"}}>
         {photos.map((p,i)=>(
-          <div key={i} onClick={()=>setActive(active===i?null:i)} style={{cursor:"pointer"}}>
-            <div style={{fontFamily:VB,fontSize:"clamp(.78rem,2.8vw,.9rem)",color:C.text,fontWeight:600,marginBottom:".3rem",lineHeight:1.3}}>
+          <div key={i} onClick={e=>{e.stopPropagation();setActive(active===i?null:i);}} style={{cursor:"pointer"}}>
+            <div style={{fontFamily:VB,fontSize:"clamp(.75rem,2.8vw,.88rem)",color:C.text,fontWeight:600,marginBottom:".3rem",lineHeight:1.3}}>
               {p.title}
             </div>
             <div style={{position:"relative",overflow:"hidden",border:"1px solid "+(active===i?"rgba(28,74,24,.4)":"rgba(28,74,24,.12)"),boxShadow:active===i?"0 2px 12px rgba(28,74,24,.18)":"0 1px 4px rgba(28,74,24,.06)",transition:"all .2s"}}>
@@ -379,7 +403,7 @@ function S2_Solution() {
   );
 }
 
-function S3_Position() {
+function S4_Position() {
   const [step,setStep]=useState(0);
   const [answers,setAnswers]=useState([]);
   const [result,setResult]=useState(null);
@@ -402,7 +426,7 @@ function S3_Position() {
   return (
     <Shell>
       <Label>POSITION ── どの工法を使うべきか、一緒に確認します</Label>
-      <div style={{fontFamily:VB,fontSize:"clamp(.82rem,3vw,.95rem)",color:"rgba(93,117,88,.55)",lineHeight:1.75,marginBottom:"clamp(.6rem,2vw,.9rem)",borderLeft:"2px solid rgba(28,74,24,.1)",paddingLeft:".75rem"}}>
+      <div style={{fontFamily:VB,fontSize:"clamp(.82rem,3vw,.95rem)",color:"rgba(93,117,88,.55)",lineHeight:1.75,marginBottom:"clamp(.6rem,2vw,.9rem)",borderLeft:"2px solid rgba(28,74,24,.1)",paddingLeft:".75rem",fontWeight:500}}>
         ※ 今日は「どの工法が正しいか」を決める場ではなく、<br/>どこで判断が分かれるかを整理するだけです。
       </div>
       {step>0&&step<5&&(
@@ -428,9 +452,9 @@ function S3_Position() {
         <div key={step} style={{animation:"fadeIn .35s ease"}}>
           <div style={{fontFamily:V,fontSize:"clamp(.6rem,2vw,.7rem)",color:"rgba(28,74,24,.33)",letterSpacing:".15em",marginBottom:".6rem"}}>Q{step} / 4</div>
           <div style={{fontFamily:VB,fontSize:"clamp(1.2rem,5vw,1.8rem)",color:C.text,fontWeight:700,lineHeight:1.4,marginBottom:"clamp(.4rem,1.5vw,.6rem)"}}>{curQ.q}</div>
-          <div style={{fontFamily:VB,fontSize:"clamp(.78rem,3vw,.9rem)",color:"rgba(93,117,88,.52)",marginBottom:"clamp(1.25rem,5vw,2rem)"}}>{curQ.hint}</div>
+          <div style={{fontFamily:VB,fontSize:"clamp(.78rem,3vw,.9rem)",color:"rgba(93,117,88,.52)",marginBottom:"clamp(1.25rem,5vw,2rem)",fontWeight:500}}>{curQ.hint}</div>
           <div style={{display:"flex",flexDirection:"column",gap:"clamp(.5rem,2vw,.75rem)"}}>
-            <button onClick={()=>handle("yes",curQ.yes.next)} style={{border:"1px solid rgba(28,74,24,.28)",background:"rgba(28,74,24,.06)",color:C.forest,fontFamily:VB,fontSize:"clamp(1rem,4vw,1.3rem)",fontWeight:600,padding:"clamp(.9rem,4vw,1.25rem) clamp(1rem,4vw,1.5rem)",cursor:"pointer",textAlign:"left",display:"flex",alignItems:"center",justifyContent:"space-between",WebkitTapHighlightColor:"transparent",transition:"all .2s"}}>
+            <button onClick={()=>handle("yes",curQ.yes.next)} style={{border:"1px solid rgba(28,74,24,.28)",background:"rgba(28,74,24,.06)",color:C.forest,fontFamily:VB,fontSize:"clamp(1rem,4vw,1.3rem)",fontWeight:700,padding:"clamp(.9rem,4vw,1.25rem) clamp(1rem,4vw,1.5rem)",cursor:"pointer",textAlign:"left",display:"flex",alignItems:"center",justifyContent:"space-between",WebkitTapHighlightColor:"transparent",transition:"all .2s"}}>
               <span>{curQ.yes.label}</span><span style={{fontFamily:V,fontSize:".9rem",opacity:.45}}>▶</span>
             </button>
             <button onClick={()=>handle("no",curQ.no.next)} style={{border:"1px solid rgba(93,117,88,.2)",background:C.surface,color:C.sage,fontFamily:VB,fontSize:"clamp(1rem,4vw,1.3rem)",fontWeight:500,padding:"clamp(.9rem,4vw,1.25rem) clamp(1rem,4vw,1.5rem)",cursor:"pointer",textAlign:"left",display:"flex",alignItems:"center",justifyContent:"space-between",WebkitTapHighlightColor:"transparent",transition:"all .2s"}}>
@@ -452,7 +476,7 @@ function S3_Position() {
             <Corners color={RC[result].color} size={20} t={2}/>
             <div style={{fontFamily:V,fontSize:"clamp(.62rem,2vw,.72rem)",color:RC[result].color+"90",letterSpacing:".15em",marginBottom:".6rem"}}>RESULT</div>
             <div style={{fontFamily:VB,fontSize:"clamp(1.2rem,5vw,1.8rem)",color:RC[result].color,fontWeight:700,lineHeight:1.3,marginBottom:".75rem"}}>{RC[result].title}</div>
-            <div style={{fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.muted,lineHeight:1.85}}>{RC[result].body}</div>
+            <div style={{fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.muted,lineHeight:1.85,fontWeight:500}}>{RC[result].body}</div>
           </div>
           <div style={{border:"1px solid rgba(93,117,88,.15)",background:C.surface,padding:"clamp(.75rem,3vw,1rem)",boxShadow:"0 1px 4px rgba(28,74,24,.04)"}}>
             <div style={{fontFamily:V,fontSize:"clamp(.6rem,2vw,.7rem)",color:"rgba(93,117,88,.38)",letterSpacing:".15em",marginBottom:".6rem"}}>SD工法 vs 無足場アンカー（ビスタ）── 本質の差</div>
@@ -466,7 +490,7 @@ function S3_Position() {
                   {col.pts.map((p,j)=>(
                     <div key={j} style={{display:"flex",alignItems:"flex-start",gap:".35rem",marginBottom:".25rem"}}>
                       <span style={{color:col.color,fontFamily:V,fontSize:".65rem",flexShrink:0,marginTop:".1rem"}}>▸</span>
-                      <span style={{fontFamily:VB,fontSize:"clamp(.72rem,2.5vw,.82rem)",color:C.muted,lineHeight:1.5}}>{p}</span>
+                      <span style={{fontFamily:VB,fontSize:"clamp(.72rem,2.5vw,.82rem)",color:C.muted,lineHeight:1.5,fontWeight:500}}>{p}</span>
                     </div>
                   ))}
                 </div>
@@ -482,7 +506,7 @@ function S3_Position() {
   );
 }
 
-function S4_Strength() {
+function S5_Strength() {
   const [open,setOpen]=useState(null);
   const items=[
     {icon:"🏔",title:"山奥でも入れる",       sub:"HIGH ACCESS // 高所・狭小地・山間部",  color:C.forest,detail:"コンパクトな機械はモノレール・簡易索道で山奥まで搬入可能。クレーンが届かない急斜面も施工範囲に入ります。",benefit:"「対応不可」だった現場を受注できる。入札競合が減る現場で圧倒的に有利。"},
@@ -502,7 +526,7 @@ function S4_Strength() {
   );
 }
 
-function S5_Proof() {
+function S6_Proof() {
   const records=[
     {tag:"災害復旧",color:C.danger, title:"熊本県震災復興工事",    body:"震災直後の緊急現場。重機が入れない急斜面でも即日着工。足場レスの機動力が発揮された代表案件。"},
     {tag:"広域復旧",color:C.forest, title:"東日本大震災 復興工事", body:"大規模・長期の復興事業に参画。稼働率・安全性・品質の三要素を評価され継続受注。"},
@@ -520,8 +544,8 @@ function S5_Proof() {
             <div style={{display:"flex",alignItems:"center",gap:".6rem",marginBottom:".5rem"}}>
               <div style={{fontFamily:V,fontSize:"clamp(.6rem,2vw,.7rem)",color:r.color,border:"1px solid "+r.color+"45",padding:".2rem .5rem",letterSpacing:".08em"}}>{r.tag}</div>
             </div>
-            <div style={{fontFamily:VB,fontSize:"clamp(1rem,3.8vw,1.2rem)",color:C.text,fontWeight:600,lineHeight:1.3,marginBottom:".4rem"}}>{r.title}</div>
-            <div style={{fontFamily:VB,fontSize:"clamp(.8rem,3vw,.95rem)",color:C.muted,lineHeight:1.75}}>{r.body}</div>
+            <div style={{fontFamily:VB,fontSize:"clamp(1rem,3.8vw,1.2rem)",color:C.text,fontWeight:700,lineHeight:1.3,marginBottom:".4rem"}}>{r.title}</div>
+            <div style={{fontFamily:VB,fontSize:"clamp(.8rem,3vw,.95rem)",color:C.muted,lineHeight:1.75,fontWeight:500}}>{r.body}</div>
             <div style={{marginTop:".75rem"}}><ImageSlot label={r.title+" 現場写真"} aspectRatio="40%"/></div>
           </div>
         ))}
@@ -530,7 +554,7 @@ function S5_Proof() {
   );
 }
 
-function S6_FAQ() {
+function S7_FAQ() {
   const [open,setOpen]=useState(null);
   const faqs=[
     {q:"SD工法と何が違うの？",        a:"最大の違いは「グランドアンカー工まで対応できる」こと。SD工法はアンカー規模に制約がありますが、ビスタの工法はワイヤー緊張方式の独自設計により、より大型アンカーまで対応可能です。機動力とパワーを両立しています。"},
@@ -549,13 +573,13 @@ function S6_FAQ() {
             <button onClick={()=>{sfxSelect();setOpen(open===i?null:i);}} style={{width:"100%",textAlign:"left",cursor:"pointer",background:open===i?"rgba(28,74,24,.05)":C.surface,border:"1px solid "+(open===i?"rgba(28,74,24,.28)":"rgba(28,74,24,.1)"),padding:"clamp(.85rem,3.5vw,1.1rem) clamp(1rem,4vw,1.3rem)",WebkitTapHighlightColor:"transparent",transition:"all .2s",boxShadow:open===i?"none":"0 1px 3px rgba(28,74,24,.04)"}}>
               <div style={{display:"flex",alignItems:"center",gap:".75rem"}}>
                 <span style={{fontFamily:V,fontSize:"clamp(.7rem,2.5vw,.8rem)",color:C.forest,flexShrink:0,fontWeight:700}}>Q.</span>
-                <span style={{fontFamily:VB,fontSize:"clamp(.9rem,3.5vw,1.1rem)",color:open===i?C.text:C.muted,flex:1,lineHeight:1.4}}>{f.q}</span>
+                <span style={{fontFamily:VB,fontSize:"clamp(.9rem,3.5vw,1.1rem)",color:open===i?C.text:C.muted,flex:1,lineHeight:1.4,fontWeight:open===i?700:500}}>{f.q}</span>
                 <span style={{fontFamily:V,color:"rgba(28,74,24,.28)",fontSize:".8rem",flexShrink:0,transition:"transform .2s",transform:open===i?"rotate(90deg)":"none"}}>▶</span>
               </div>
             </button>
             {open===i&&(
               <div style={{padding:"clamp(.85rem,3.5vw,1.1rem) clamp(1rem,4vw,1.3rem)",borderLeft:"3px solid "+C.forest,borderRight:"1px solid rgba(28,74,24,.1)",borderBottom:"1px solid rgba(28,74,24,.1)",background:"rgba(28,74,24,.03)",animation:"fadeIn .25s ease"}}>
-                <div style={{fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.muted,lineHeight:1.85}}>
+                <div style={{fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.muted,lineHeight:1.85,fontWeight:500}}>
                   <span style={{color:C.forest,fontFamily:V,fontSize:"clamp(.65rem,2vw,.75rem)",marginRight:".5rem",fontWeight:700}}>A.</span>{f.a}
                 </div>
               </div>
@@ -567,10 +591,10 @@ function S6_FAQ() {
   );
 }
 
-function S7_Scope() {
+function S8_Scope() {
   const [open,setOpen]=useState(null);
   const services=[
-    {id:"anchor",icon:"⚓",title:"無足場アンカー工法",  sub:"SLOPE ANCHOR // 法面安定・地すべり抑止",    color:C.forest,detail:"グランドアンカー工・鉄筋挿入工。足場不要のワイヤー緊張方式（特許）により、急斜面・山間部・崩れやすい地盤でも安全・迅速に施工。",benefit:"他社が断る現場こそ、ビスタの出番。緊急対応・難工事に対応します。",images:[{src:"/photos/05_road.jpg",label:"道路補強工事"},{src:"/photos/06_rinkan.jpg",label:"林間・法面施工"}]},
+    {id:"anchor",icon:"⚓",title:"無足場アンカー工法",  sub:"SLOPE ANCHOR // 法面安定・地すべり抑止",    color:C.forest,detail:"グランドアンカー工・鉄筋挿入工。足場不要のワイヤー緊張方式（特許）により、急斜面・山間部・崩れやすい地盤でも安全・迅速に施工。",benefit:"他社が断る現場こそ、ビスタの出番。緊急対応・難工事に対応します。",images:[{src:null,label:"道路補強工事"},{src:null,label:"林間・法面施工"}]},
     {id:"wood",  icon:"🌲",title:"木製構造物工法",      sub:"WOOD STRUCTURE // ガードレール・ウッド筋工",color:C.wood, detail:"木製ガードレール「木景（こかげ）」・木製ガードフェンス・ウッド筋工。性能確認試験に合格した安全性と、景観・環境に配慮した素材を両立。",benefit:"SDGs・景観条例エリアの案件、地域材活用のニーズに応えます。",images:[{src:null,label:"木製構造物 施工写真①"}]},
   ];
   return (
@@ -585,7 +609,7 @@ function S7_Scope() {
             <button onClick={()=>{sfxSelect();setOpen(open===s.id?null:s.id);}} style={{width:"100%",textAlign:"left",background:open===s.id?"rgba(28,74,24,.05)":C.surface,border:"1px solid "+(open===s.id?"rgba(28,74,24,.28)":"rgba(28,74,24,.1)"),padding:"clamp(.9rem,3.5vw,1.25rem) clamp(1rem,4vw,1.4rem)",display:"flex",alignItems:"center",gap:"clamp(.6rem,2.5vw,1rem)",cursor:"pointer",transition:"all .2s",WebkitTapHighlightColor:"transparent",boxShadow:open===s.id?"none":"0 1px 4px rgba(28,74,24,.05)"}}>
               <div style={{fontSize:"clamp(1.4rem,5vw,1.8rem)",flexShrink:0}}>{s.icon}</div>
               <div style={{flex:1,minWidth:0}}>
-                <div style={{fontFamily:VB,fontSize:"clamp(1rem,4vw,1.3rem)",color:open===s.id?C.forest:C.text,fontWeight:600,lineHeight:1.2}}>{s.title}</div>
+                <div style={{fontFamily:VB,fontSize:"clamp(1rem,4vw,1.3rem)",color:open===s.id?C.forest:C.text,fontWeight:700,lineHeight:1.2}}>{s.title}</div>
                 <div style={{fontFamily:V,fontSize:"clamp(.6rem,2.2vw,.7rem)",color:C.sage,marginTop:".25rem"}}>{s.sub}</div>
               </div>
               <span style={{fontFamily:V,color:"rgba(28,74,24,.28)",fontSize:".85rem",flexShrink:0,transition:"transform .2s",transform:open===s.id?"rotate(90deg)":"none"}}>▶</span>
@@ -593,19 +617,12 @@ function S7_Scope() {
             {open===s.id&&(
               <div style={{padding:"clamp(.9rem,3.5vw,1.25rem) clamp(1rem,4vw,1.5rem)",borderLeft:"3px solid "+s.color,borderRight:"1px solid rgba(28,74,24,.1)",borderBottom:"1px solid rgba(28,74,24,.1)",background:"rgba(28,74,24,.03)",animation:"fadeIn .25s ease"}}>
                 <div style={{display:"grid",gridTemplateColumns:`repeat(${s.images.length>1?"2":"1"},1fr)`,gap:".5rem",marginBottom:"1rem"}}>
-                  {s.images.map((img,j)=>
-                    img.src
-                      ? <div key={j}>
-                          <div style={{fontFamily:VB,fontSize:"clamp(.72rem,2.5vw,.82rem)",color:C.text,fontWeight:600,marginBottom:".3rem"}}>{img.label}</div>
-                          <img src={img.src} alt={img.label} style={{width:"100%",aspectRatio:"4/3",objectFit:"cover",display:"block",border:"1px solid rgba(28,74,24,.1)"}}/>
-                        </div>
-                      : <ImageSlot key={j} label={img.label} aspectRatio="60%"/>
-                  )}
+                  {s.images.map((img,j)=><ImageSlot key={j} label={img.label} aspectRatio="60%"/>)}
                 </div>
-                <div style={{fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.muted,lineHeight:1.85,marginBottom:".75rem"}}>{s.detail}</div>
+                <div style={{fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.muted,lineHeight:1.85,marginBottom:".75rem",fontWeight:500}}>{s.detail}</div>
                 <div style={{display:"flex",alignItems:"flex-start",gap:".6rem",padding:".65rem .9rem",background:"rgba(28,74,24,.06)",border:"1px solid rgba(28,74,24,.14)"}}>
                   <span style={{color:C.forest,fontFamily:V,flexShrink:0}}>✓</span>
-                  <div style={{fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.forest,lineHeight:1.6,fontWeight:500}}>{s.benefit}</div>
+                  <div style={{fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.forest,lineHeight:1.6,fontWeight:600}}>{s.benefit}</div>
                 </div>
               </div>
             )}
@@ -616,34 +633,9 @@ function S7_Scope() {
   );
 }
 
-function S8_Hearing({ checks, onCheck }) {
-  const items=[
-    {id:"slope",   label:"法面・アンカー案件が年間ある",            sub:"グランドアンカー工・鉄筋挿入工など"},
-    {id:"disaster",label:"災害復旧・緊急対応の案件がある",           sub:"豪雨・地震・地すべりなど"},
-    {id:"access",  label:"クレーン・足場が入りにくい現場がある",     sub:"山間部・急斜面・狭小地など"},
-    {id:"eco",     label:"環境制約・景観条例のある現場がある",       sub:"伐採不可・SDGs対応が必要な現場"},
-    {id:"neighbor",label:"近隣住民との境界・騒音トラブルがある",     sub:"足場の越境・振動・粉塵クレームなど"},
-    {id:"rework",  label:"工程の手戻りで工期遅延が起きたことがある", sub:"想定外の地盤・天候・施工条件の変化など"},
-    {id:"partner", label:"協力会社の手配に困っている",               sub:"人手不足・技術者が見つからないなど"},
-  ];
-  const count=Object.values(checks).filter(Boolean).length;
-  return (
-    <Shell>
-      <Label>HEARING ── まず、貴社の現場について聞かせてください</Label>
-      <div style={{fontFamily:VB,fontSize:"clamp(1.1rem,4.5vw,1.7rem)",color:C.text,fontWeight:700,lineHeight:1.35,marginBottom:"clamp(.75rem,3vw,1.25rem)"}}>
-        当てはまるものを<br/><span style={{color:C.forest}}>タップしてください。</span>
-      </div>
-      {count>0&&<div style={{fontFamily:V,fontSize:"clamp(.62rem,2vw,.72rem)",color:C.forest,letterSpacing:".1em",marginBottom:"clamp(.5rem,2vw,.75rem)",animation:"fadeIn .3s ease"}}>{count}項目 確認 ── この内容をもとに説明します</div>}
-      <div style={{display:"flex",flexDirection:"column",gap:"clamp(.35rem,1.5vw,.5rem)"}}>
-        {items.map(it=><CheckItem key={it.id} id={it.id} label={it.label} sub={it.sub} checked={!!checks[it.id]} onChange={onCheck}/>)}
-      </div>
-    </Shell>
-  );
-}
-
 function S9_Close({ checks }) {
   const [phase,setPhase]=useState(0);
-  useEffect(()=>{sfxChime();const t=setTimeout(()=>setPhase(1),1000);return()=>clearTimeout(t);},[]);
+  useEffect(()=>{sfxChime();const t=setTimeout(()=>setPhase(1),1000);return () =>clearTimeout(t);},[]);
   const labels={slope:"法面・アンカー案件",disaster:"災害復旧・緊急対応",access:"クレーン・足場が入りにくい現場",eco:"環境制約・景観条例のある現場",neighbor:"近隣住民との境界・騒音トラブル",rework:"工程の手戻り・工期遅延",partner:"協力会社の手配難"};
   const matched=Object.entries(checks).filter(([,v])=>v).map(([k])=>labels[k]);
   return (
@@ -662,11 +654,11 @@ function S9_Close({ checks }) {
               {matched.map((m,i)=>(
                 <div key={i} style={{display:"flex",alignItems:"center",gap:".6rem"}}>
                   <div style={{width:6,height:6,background:C.forest,flexShrink:0}}/>
-                  <div style={{fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.text,lineHeight:1.4}}>{m}</div>
+                  <div style={{fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.text,lineHeight:1.4,fontWeight:600}}>{m}</div>
                 </div>
               ))}
             </div>
-            <div style={{marginTop:"1rem",fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.forest,lineHeight:1.6,borderTop:"1px solid rgba(28,74,24,.1)",paddingTop:".75rem",fontWeight:500}}>
+            <div style={{marginTop:"1rem",fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.forest,lineHeight:1.6,borderTop:"1px solid rgba(28,74,24,.1)",paddingTop:".75rem",fontWeight:600}}>
               次回は、判断が分かれそうな現場条件だけ整理しましょう。
             </div>
           </div>
@@ -680,7 +672,7 @@ function S9_Close({ checks }) {
           {[["社名","株式会社ビスタ"],["所在地","愛媛県松山市平井町2220-1"],["TEL","089-907-0914"],["URL","vista-ehime.com"]].map(([k,v],i,arr)=>(
             <div key={k} style={{display:"flex",borderBottom:i<arr.length-1?"1px solid rgba(28,74,24,.07)":"none"}}>
               <div style={{fontFamily:V,fontSize:"clamp(.6rem,2vw,.7rem)",color:"rgba(28,74,24,.38)",padding:".4rem .6rem",minWidth:56,flexShrink:0,display:"flex",alignItems:"center"}}>{k}</div>
-              <div style={{fontFamily:VB,fontSize:"clamp(.78rem,2.8vw,.9rem)",color:C.muted,padding:".4rem .6rem",display:"flex",alignItems:"center"}}>{v}</div>
+              <div style={{fontFamily:VB,fontSize:"clamp(.78rem,2.8vw,.9rem)",color:C.muted,padding:".4rem .6rem",display:"flex",alignItems:"center",fontWeight:500}}>{v}</div>
             </div>
           ))}
         </div>
@@ -710,7 +702,7 @@ export default function App() {
       if(["ArrowRight","ArrowDown"," "].includes(e.key)){e.preventDefault();go(idx+1);}
       if(["ArrowLeft","ArrowUp"].includes(e.key)){e.preventDefault();go(idx-1);}
     };
-    window.addEventListener("keydown",h);return()=>window.removeEventListener("keydown",h);
+    window.addEventListener("keydown",h);return () =>window.removeEventListener("keydown",h);
   },[go,idx]);
 
   useEffect(()=>{if(idx===TOTAL-1)setTimeout(sfxChime,300);},[idx]);
@@ -722,9 +714,16 @@ export default function App() {
   const handleAreaClick=(e)=>{if(e.target.closest("button")||e.target.closest("a"))return;if(isMobile)go(idx+1);};
 
   const renderSlide=()=>{switch(idx){
-    case 0:return<S0_Boot/>;case 1:return<S8_Hearing checks={checks} onCheck={handleCheck}/>;case 2:return<S1_Pain/>;
-    case 3:return<S2_Solution/>;case 4:return<S3_Position/>;case 5:return<S4_Strength/>;case 6:return<S5_Proof/>;
-    case 7:return<S6_FAQ/>;case 8:return<S7_Scope/>;case 9:return<S9_Close checks={checks}/>;
+    case 0:return <S0_Boot/>;
+    case 1:return <S1_Hearing checks={checks} onCheck={handleCheck}/>;
+    case 2:return <S2_Pain/>;
+    case 3:return <S3_Solution/>;
+    case 4:return <S4_Position/>;
+    case 5:return <S5_Strength/>;
+    case 6:return <S6_Proof/>;
+    case 7:return <S7_FAQ/>;
+    case 8:return <S8_Scope/>;
+    case 9:return <S9_Close checks={checks}/>;
     default:return null;
   }};
 
@@ -734,7 +733,7 @@ export default function App() {
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;600;700&family=Share+Tech+Mono&display=swap');
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     html,body,#root{width:100%;height:100%;overflow:hidden;cursor:default;background:#f4f1eb;-webkit-text-size-adjust:100%}
-    body{color:#1a2e17;font-family:'Noto Sans JP','Inter',sans-serif;touch-action:pan-y;-webkit-font-smoothing:antialiased}
+    body{color:#1a2e17;font-family:'Noto Sans JP','Inter',sans-serif;touch-action:pan-y;-webkit-font-smoothing:antialiased;font-weight:500}
     ::selection{background:#1c4a18;color:#fff}
     button{-webkit-tap-highlight-color:transparent;touch-action:manipulation;font-family:'Noto Sans JP','Inter',sans-serif}
     @keyframes blink   {0%,100%{opacity:1}50%{opacity:0}}
