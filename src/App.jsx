@@ -617,15 +617,17 @@ function S8_Scope() {
             {open===s.id&&(
               <div style={{padding:"clamp(.9rem,3.5vw,1.25rem) clamp(1rem,4vw,1.5rem)",borderLeft:"3px solid "+s.color,borderRight:"1px solid rgba(28,74,24,.1)",borderBottom:"1px solid rgba(28,74,24,.1)",background:"rgba(28,74,24,.03)",animation:"fadeIn .25s ease"}}>
                 <div style={{display:"grid",gridTemplateColumns:`repeat(${s.images.length>1?"2":"1"},1fr)`,gap:".5rem",marginBottom:"1rem"}}>
-                  {s.images.map((img,j)=>{
-                    if (img.src) return (
-                      <div key={j}>
-                        <div style={{fontFamily:VB,fontSize:"clamp(.72rem,2.5vw,.82rem)",color:C.text,fontWeight:600,marginBottom:".3rem"}}>{img.label}</div>
-                        <img src={img.src} alt={img.label} style={{width:"100%",aspectRatio:"4/3",objectFit:"cover",display:"block",border:"1px solid rgba(28,74,24,.1)"}}/>
-                      </div>
-                    );
-                    return <ImageSlot key={j} label={img.label} aspectRatio="60%"/>;
-                  })}
+                  {s.images.map((img,j)=>(
+                    img.src
+                      ? <div key={j}>
+                          <div style={{fontFamily:VB,fontSize:"clamp(.72rem,2.5vw,.82rem)",color:C.text,fontWeight:600,marginBottom:".3rem"}}>{img.label}</div>
+                          <div style={{position:"relative",overflow:"hidden",border:"1px solid rgba(28,74,24,.12)",boxShadow:"0 1px 4px rgba(28,74,24,.06)"}}>
+                            <img src={img.src} alt={img.label}
+                              style={{width:"100%",display:"block",objectFit:"cover",verticalAlign:"top"}}/>
+                          </div>
+                        </div>
+                      : <ImageSlot key={j} label={img.label} aspectRatio="60%"/>
+                  ))}
                 </div>
                 <div style={{fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.muted,lineHeight:1.85,marginBottom:".75rem",fontWeight:500}}>{s.detail}</div>
                 <div style={{display:"flex",alignItems:"flex-start",gap:".6rem",padding:".65rem .9rem",background:"rgba(28,74,24,.06)",border:"1px solid rgba(28,74,24,.14)"}}>
