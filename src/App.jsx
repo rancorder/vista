@@ -335,18 +335,37 @@ function S1_Pain() {
 }
 
 function S2_Solution() {
+  const [active, setActive] = useState(null);
+  const photos = [
+    { src:"/photos/01_douro.jpg",    cap:"道路補強工事 // 無足場アンカー工法" },
+    { src:"/photos/02_nomen.jpg",    cap:"法面補強工事 // 削孔状況" },
+    { src:"/photos/03_anchor1.jpg",  cap:"グランドアンカー施工事例 // アンカー工" },
+    { src:"/photos/04_anchor2.jpg",  cap:"グランドアンカー // 削孔状況" },
+  ];
   return (
     <Shell>
       <Label>SOLUTION ── 足場を"消す"特許工法</Label>
-      <div style={{fontFamily:VB,fontSize:"clamp(1.5rem,6vw,3rem)",color:C.text,fontWeight:700,lineHeight:1.25,marginBottom:"clamp(1rem,4vw,1.5rem)"}}>
+      <div style={{fontFamily:VB,fontSize:"clamp(1.5rem,6vw,3rem)",color:C.text,fontWeight:700,lineHeight:1.25,marginBottom:"clamp(.75rem,3vw,1.25rem)"}}>
         ワイヤーで機械を<br/>斜面に固定する。<br/><span style={{color:C.forest}}>それだけで、足場がいらない。</span>
       </div>
-      <div style={{border:"1px solid rgba(28,74,24,.15)",background:C.surface,padding:"clamp(.75rem,3vw,1rem)",marginBottom:"clamp(.75rem,3vw,1.25rem)",position:"relative",boxShadow:"0 2px 8px rgba(28,74,24,.07)"}}>
-        <Corners color={C.forest} size={16} t={1}/>
-        <SlopeSVG/>
-        <div style={{fontFamily:V,fontSize:"clamp(.52rem,1.6vw,.62rem)",color:"rgba(28,74,24,.28)",textAlign:"right",marginTop:".4rem",letterSpacing:".08em"}}>
-          CONCEPT DIAGRAM // 無足場アンカー工法
-        </div>
+      {/* 2×2 photo grid */}
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"clamp(.35rem,1.5vw,.5rem)",marginBottom:"clamp(.75rem,3vw,1.1rem)"}}>
+        {photos.map((p,i)=>(
+          <div key={i} onClick={()=>setActive(active===i?null:i)}
+            style={{position:"relative",cursor:"pointer",overflow:"hidden",border:"1px solid "+(active===i?"rgba(28,74,24,.4)":"rgba(28,74,24,.12)"),boxShadow:active===i?"0 2px 12px rgba(28,74,24,.18)":"0 1px 4px rgba(28,74,24,.06)",transition:"all .2s"}}>
+            <img src={p.src} alt={p.cap}
+              style={{width:"100%",aspectRatio:"4/3",objectFit:"cover",display:"block",transition:"transform .3s",transform:active===i?"scale(1.03)":"scale(1)"}}/>
+            <div style={{position:"absolute",bottom:0,left:0,right:0,background:"linear-gradient(transparent,rgba(28,74,24,.75))",padding:"clamp(.4rem,2vw,.6rem) clamp(.5rem,2vw,.7rem)",opacity:active===i?1:0,transition:"opacity .2s"}}>
+              <div style={{fontFamily:V,fontSize:"clamp(.5rem,1.8vw,.6rem)",color:"rgba(255,255,255,.9)",letterSpacing:".1em",lineHeight:1.4}}>{p.cap}</div>
+            </div>
+            {active!==i&&(
+              <div style={{position:"absolute",inset:0,background:"rgba(28,74,24,.04)",transition:"background .2s"}}/>
+            )}
+          </div>
+        ))}
+      </div>
+      <div style={{fontFamily:V,fontSize:"clamp(.52rem,1.8vw,.62rem)",color:"rgba(93,117,88,.38)",letterSpacing:".1em",marginBottom:"clamp(.5rem,2vw,.75rem)",textAlign:"right"}}>
+        ▸ 写真をタップすると詳細表示
       </div>
       <div style={{display:"flex",gap:"clamp(.4rem,1.5vw,.6rem)",flexWrap:"wrap"}}>
         {[{label:"特許工法",color:C.forest},{label:"グランドアンカー工 対応",color:C.bark},{label:"鉄筋挿入工 対応",color:C.bark}].map(b=>(
