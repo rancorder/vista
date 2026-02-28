@@ -337,10 +337,10 @@ function S1_Pain() {
 function S2_Solution() {
   const [active, setActive] = useState(null);
   const photos = [
-    { src:"/photos/01_douro.jpg",    cap:"道路補強工事 // 無足場アンカー工法" },
-    { src:"/photos/02_nomen.jpg",    cap:"法面補強工事 // 削孔状況" },
-    { src:"/photos/03_anchor1.jpg",  cap:"グランドアンカー施工事例 // アンカー工" },
-    { src:"/photos/04_anchor2.jpg",  cap:"グランドアンカー // 削孔状況" },
+    { src:"/photos/01_douro.jpg",   title:"道路補強工事",           cap:"無足場アンカー工法 // 施工状況" },
+    { src:"/photos/02_nomen.jpg",   title:"法面補強工事",           cap:"鉄筋挿入工 // 削孔状況" },
+    { src:"/photos/03_anchor1.jpg", title:"グランドアンカー施工事例", cap:"アンカー工 // 無足場削孔機" },
+    { src:"/photos/04_anchor2.jpg", title:"グランドアンカー施工風景", cap:"アンカー工 // 削孔状況" },
   ];
   return (
     <Shell>
@@ -351,16 +351,17 @@ function S2_Solution() {
       {/* 2×2 photo grid */}
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"clamp(.35rem,1.5vw,.5rem)",marginBottom:"clamp(.75rem,3vw,1.1rem)"}}>
         {photos.map((p,i)=>(
-          <div key={i} onClick={()=>setActive(active===i?null:i)}
-            style={{position:"relative",cursor:"pointer",overflow:"hidden",border:"1px solid "+(active===i?"rgba(28,74,24,.4)":"rgba(28,74,24,.12)"),boxShadow:active===i?"0 2px 12px rgba(28,74,24,.18)":"0 1px 4px rgba(28,74,24,.06)",transition:"all .2s"}}>
-            <img src={p.src} alt={p.cap}
-              style={{width:"100%",aspectRatio:"4/3",objectFit:"cover",display:"block",transition:"transform .3s",transform:active===i?"scale(1.03)":"scale(1)"}}/>
-            <div style={{position:"absolute",bottom:0,left:0,right:0,background:"linear-gradient(transparent,rgba(28,74,24,.75))",padding:"clamp(.4rem,2vw,.6rem) clamp(.5rem,2vw,.7rem)",opacity:active===i?1:0,transition:"opacity .2s"}}>
-              <div style={{fontFamily:V,fontSize:"clamp(.5rem,1.8vw,.6rem)",color:"rgba(255,255,255,.9)",letterSpacing:".1em",lineHeight:1.4}}>{p.cap}</div>
+          <div key={i} onClick={()=>setActive(active===i?null:i)} style={{cursor:"pointer"}}>
+            <div style={{fontFamily:VB,fontSize:"clamp(.78rem,2.8vw,.9rem)",color:C.text,fontWeight:600,marginBottom:".3rem",lineHeight:1.3}}>
+              {p.title}
             </div>
-            {active!==i&&(
-              <div style={{position:"absolute",inset:0,background:"rgba(28,74,24,.04)",transition:"background .2s"}}/>
-            )}
+            <div style={{position:"relative",overflow:"hidden",border:"1px solid "+(active===i?"rgba(28,74,24,.4)":"rgba(28,74,24,.12)"),boxShadow:active===i?"0 2px 12px rgba(28,74,24,.18)":"0 1px 4px rgba(28,74,24,.06)",transition:"all .2s"}}>
+              <img src={p.src} alt={p.title}
+                style={{width:"100%",aspectRatio:"4/3",objectFit:"cover",display:"block",transition:"transform .3s",transform:active===i?"scale(1.03)":"scale(1)"}}/>
+              <div style={{position:"absolute",bottom:0,left:0,right:0,background:"linear-gradient(transparent,rgba(28,74,24,.75))",padding:"clamp(.4rem,2vw,.6rem) clamp(.5rem,2vw,.7rem)",opacity:active===i?1:0,transition:"opacity .2s"}}>
+                <div style={{fontFamily:V,fontSize:"clamp(.5rem,1.8vw,.6rem)",color:"rgba(255,255,255,.9)",letterSpacing:".1em",lineHeight:1.4}}>{p.cap}</div>
+              </div>
+            </div>
           </div>
         ))}
       </div>
