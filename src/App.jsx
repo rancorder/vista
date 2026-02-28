@@ -399,21 +399,6 @@ function S3_Position() {
           <div style={{fontFamily:VB,fontSize:"clamp(1.2rem,5vw,2rem)",color:C.text,fontWeight:700,lineHeight:1.35,marginBottom:"clamp(1rem,4vw,1.5rem)"}}>
             「なぜ無足場なのか」を<br/><span style={{color:C.forest}}>相手と一緒に確認します。</span>
           </div>
-          <div style={{border:"1px solid rgba(28,74,24,.12)",background:C.surface,padding:"clamp(.85rem,3.5vw,1.2rem)",marginBottom:"clamp(.75rem,3vw,1.25rem)",boxShadow:"0 1px 6px rgba(28,74,24,.06)"}}>
-            <div style={{fontFamily:V,fontSize:"clamp(.6rem,2vw,.7rem)",color:"rgba(28,74,24,.38)",letterSpacing:".15em",marginBottom:".75rem"}}>工法選択ツリー</div>
-            {[
-              {indent:0,icon:"📋",text:"足場が組める？",                               color:"rgba(93,117,88,.65)"},
-              {indent:1,icon:"✔", text:"YES → 足場工法（通常）",                        color:"rgba(93,117,88,.5)"},
-              {indent:1,icon:"✖", text:"NO  → 無足場系へ",                              color:C.forest},
-              {indent:2,icon:"▸", text:"SD工法",                                          color:C.bark},
-              {indent:2,icon:"▸", text:"無足場アンカー（ビスタ）← 条件次第でここ",       color:C.forest},
-            ].map((row,i)=>(
-              <div key={i} style={{display:"flex",alignItems:"center",gap:".5rem",paddingLeft:row.indent*20,paddingTop:".25rem",paddingBottom:".25rem",borderLeft:row.indent>0?"1px dashed rgba(28,74,24,.1)":"none",marginLeft:row.indent>0?10:0}}>
-                <span style={{fontFamily:V,fontSize:"clamp(.65rem,2vw,.75rem)",color:row.color,flexShrink:0}}>{row.icon}</span>
-                <span style={{fontFamily:V,fontSize:"clamp(.65rem,2vw,.75rem)",color:row.color,lineHeight:1.5}}>{row.text}</span>
-              </div>
-            ))}
-          </div>
           <button onClick={()=>{sfxSelect();setStep(1);}} style={{width:"100%",border:"1px solid rgba(28,74,24,.28)",background:"rgba(28,74,24,.06)",color:C.forest,fontFamily:V,fontSize:"clamp(.85rem,3.2vw,1rem)",padding:"clamp(.85rem,3.5vw,1.1rem)",cursor:"pointer",letterSpacing:".1em",WebkitTapHighlightColor:"transparent",transition:"all .2s"}}>
             ▶ 判定スタート（4問）
           </button>
@@ -606,11 +591,13 @@ function S7_Scope() {
 
 function S8_Hearing({ checks, onCheck }) {
   const items=[
-    {id:"slope",   label:"法面・アンカー案件が年間ある",        sub:"グランドアンカー工・鉄筋挿入工など"},
-    {id:"disaster",label:"災害復旧・緊急対応の案件がある",       sub:"豪雨・地震・地すべりなど"},
-    {id:"access",  label:"クレーン・足場が入りにくい現場がある", sub:"山間部・急斜面・狭小地など"},
-    {id:"eco",     label:"環境制約・景観条例のある現場がある",   sub:"伐採不可・SDGs対応が必要な現場"},
-    {id:"partner", label:"協力会社の手配に困っている",           sub:"人手不足・技術者が見つからないなど"},
+    {id:"slope",   label:"法面・アンカー案件が年間ある",            sub:"グランドアンカー工・鉄筋挿入工など"},
+    {id:"disaster",label:"災害復旧・緊急対応の案件がある",           sub:"豪雨・地震・地すべりなど"},
+    {id:"access",  label:"クレーン・足場が入りにくい現場がある",     sub:"山間部・急斜面・狭小地など"},
+    {id:"eco",     label:"環境制約・景観条例のある現場がある",       sub:"伐採不可・SDGs対応が必要な現場"},
+    {id:"neighbor",label:"近隣住民との境界・騒音トラブルがある",     sub:"足場の越境・振動・粉塵クレームなど"},
+    {id:"rework",  label:"工程の手戻りで工期遅延が起きたことがある", sub:"想定外の地盤・天候・施工条件の変化など"},
+    {id:"partner", label:"協力会社の手配に困っている",               sub:"人手不足・技術者が見つからないなど"},
   ];
   const count=Object.values(checks).filter(Boolean).length;
   return (
@@ -630,7 +617,7 @@ function S8_Hearing({ checks, onCheck }) {
 function S9_Close({ checks }) {
   const [phase,setPhase]=useState(0);
   useEffect(()=>{sfxChime();const t=setTimeout(()=>setPhase(1),1000);return()=>clearTimeout(t);},[]);
-  const labels={slope:"法面・アンカー案件",disaster:"災害復旧・緊急対応",access:"クレーン・足場が入りにくい現場",eco:"環境制約・景観条例のある現場",partner:"協力会社の手配難"};
+  const labels={slope:"法面・アンカー案件",disaster:"災害復旧・緊急対応",access:"クレーン・足場が入りにくい現場",eco:"環境制約・景観条例のある現場",neighbor:"近隣住民との境界・騒音トラブル",rework:"工程の手戻り・工期遅延",partner:"協力会社の手配難"};
   const matched=Object.entries(checks).filter(([,v])=>v).map(([k])=>labels[k]);
   return (
     <Shell>
