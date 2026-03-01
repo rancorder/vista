@@ -280,247 +280,227 @@ function ImageSlot({ label, aspectRatio }) {
 
 /* ═══════════════════ SLIDES ═══════════════════ */
 
-/* ─── ThreeBootScene: 3D 無足場アンカー工法 (CDN load) ─── */
+/* ─── ThreeBootScene: 3D anchor scene (pure canvas, no deps) ─── */
 function ThreeBootScene() {
-  const ref = useRef(null);
+  const cvs = useRef(null);
   useEffect(() => {
-    let cancelled = false;
-    const script = document.createElement("script");
-    script.src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
-    script.async = true;
-    script.onload = () => { if (!cancelled) initScene(); };
-    document.head.appendChild(script);
+    const canvas = cvs.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    let animId, frame = 0;
 
-    function initScene() {
-      const THREE = window.THREE;
-      const el = ref.current;
-      if (!el || cancelled) return;
-      const W = el.clientWidth || 600;
-    const H = el.clientHeight || 800;
-
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x060f08);
-    scene.fog = new THREE.FogExp2(0x060f08, 0.055);
-
-    const camera = new THREE.PerspectiveCamera(52, W / H, 0.1, 120);
-    camera.position.set(4, 2.5, 10);
-    camera.lookAt(0, -0.5, 0);
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(W, H);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    el.appendChild(renderer.domElement);
-
-    /* ─── LIGHTS ─── */
-    scene.add(new THREE.AmbientLight(0x0d2010, 1.2));
-    const sun = new THREE.DirectionalLight(0xfff4e0, 2.2);
-    sun.position.set(6, 10, 4);
-    sun.castShadow = true;
-    sun.shadow.mapSize.width = 1024;
-    sun.shadow.mapSize.height = 1024;
-    scene.add(sun);
-    const fill = new THREE.DirectionalLight(0x4488cc, 0.4);
-    fill.position.set(-6, 3, 5);
-    scene.add(fill);
-
-    /* ─── SLOPE ─── */
-    const slopeGeo = new THREE.PlaneGeometry(22, 14, 60, 42);
-    const posAttr = slopeGeo.attributes.position;
-    for (let i = 0; i < posAttr.count; i++) {
-      const x = posAttr.getX(i);
-      const y = posAttr.getY(i);
-      const d =
-        Math.sin(x * 1.4) * Math.cos(y * 1.9) * 0.18 +
-        Math.sin(x * 3.1 + 0.8) * Math.sin(y * 2.7 + 1.2) * 0.10 +
-        Math.sin(x * 5.8 + y * 3.3) * 0.05 +
-        Math.sin(x * 9.2 - y * 6.1) * 0.02;
-      posAttr.setZ(i, d);
-    }
-    slopeGeo.computeVertexNormals();
-    const slopeMat = new THREE.MeshStandardMaterial({
-      color: 0x4a4e44,
-      roughness: 0.96,
-      metalness: 0.04,
-    });
-    const slope = new THREE.Mesh(slopeGeo, slopeMat);
-    slope.rotation.x = -Math.PI * 0.36;
-    slope.position.set(0, -1.8, -0.5);
-    slope.receiveShadow = true;
-    scene.add(slope);
-
-    /* ─── FIXED POINT ─── */
-    const fpGeo = new THREE.SphereGeometry(0.22, 20, 20);
-    const fpMat = new THREE.MeshStandardMaterial({
-      color: 0x22ff55,
-      emissive: 0x22ff55,
-      emissiveIntensity: 1.0,
-      roughness: 0.1,
-      metalness: 0.9,
-    });
-    const fixedPt = new THREE.Mesh(fpGeo, fpMat);
-    fixedPt.position.set(-4.0, 4.0, 1.8);
-    scene.add(fixedPt);
-    const fpLight = new THREE.PointLight(0x22ff55, 4, 10);
-    fpLight.position.copy(fixedPt.position);
-    scene.add(fpLight);
-
-    /* ─── ANCHORS ─── */
-    const anchorDefs = [
-      { x: -2.8, y: -0.4, z: 0.6 },
-      { x: -1.2, y: -1.1, z: 0.9 },
-      { x:  0.4, y: -0.7, z: 0.7 },
-      { x:  1.9, y: -1.4, z: 1.0 },
-      { x:  3.3, y: -0.2, z: 0.5 },
-      { x:  0.8, y:  0.6, z: 0.3 },
-    ];
-    const shaftMat = new THREE.MeshStandardMaterial({ color: 0x1a3020, roughness: 0.25, metalness: 0.88 });
-    const plateMat = new THREE.MeshStandardMaterial({ color: 0x253520, roughness: 0.18, metalness: 0.92 });
-    const nutMat   = new THREE.MeshStandardMaterial({ color: 0x1c4a18, roughness: 0.15, metalness: 0.95 });
-
-    anchorDefs.forEach((ap) => {
-      const g = new THREE.Group();
-
-      const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.048, 0.072, 1.5, 8), shaftMat);
-      const plate = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.48, 0.07), plateMat);
-      plate.position.y = 0.77;
-      const nut = new THREE.Mesh(new THREE.CylinderGeometry(0.10, 0.10, 0.10, 6), nutMat);
-      nut.position.y = 0.82;
-
-      shaft.castShadow = true;
-      plate.castShadow = true;
-
-      g.add(shaft, plate, nut);
-      g.position.set(ap.x, ap.y, ap.z);
-      g.rotation.x = Math.PI * 0.36;
-      g.rotation.z = (Math.random() - 0.5) * 0.12;
-      scene.add(g);
-    });
-
-    /* ─── WIRE ROPES ─── */
-    const wireMat = new THREE.MeshStandardMaterial({ color: 0x9a7a38, roughness: 0.35, metalness: 0.65 });
-    anchorDefs.forEach((ap) => {
-      const start = new THREE.Vector3(ap.x, ap.y + 0.8, ap.z + 0.15);
-      const end   = fixedPt.position.clone();
-      const sag   = new THREE.Vector3(
-        (start.x + end.x) / 2 + (Math.random() - 0.5) * 0.5,
-        (start.y + end.y) / 2 - 0.4,
-        (start.z + end.z) / 2
-      );
-      const curve  = new THREE.CatmullRomCurve3([start, sag, end]);
-      const tubeGeo = new THREE.TubeGeometry(curve, 24, 0.020, 7, false);
-      scene.add(new THREE.Mesh(tubeGeo, wireMat));
-    });
-
-    /* ─── DRILLING MACHINE ─── */
-    const machGrp  = new THREE.Group();
-    const bodyMat  = new THREE.MeshStandardMaterial({ color: 0x2a3820, roughness: 0.55, metalness: 0.45 });
-    const trackMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.85 });
-    const detMat   = new THREE.MeshStandardMaterial({ color: 0x334428, roughness: 0.4, metalness: 0.6 });
-
-    const body = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.58, 0.55), bodyMat);
-    const cabin = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.32, 0.40), detMat);
-    cabin.position.set(-0.28, 0.43, 0);
-    const boom = new THREE.Mesh(new THREE.CylinderGeometry(0.038, 0.052, 1.1, 8), detMat);
-    boom.rotation.z = -Math.PI * 0.30;
-    boom.position.set(0.42, 0.42, 0.08);
-    const drillBit = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.008, 0.22, 8), nutMat);
-    drillBit.rotation.z = -Math.PI * 0.30;
-    drillBit.position.set(0.88, 0.02, 0.08);
-
-    const trackGeo = new THREE.CylinderGeometry(0.145, 0.145, 0.10, 14);
-    [[-0.32, -0.30], [-0.32, 0.30], [0.32, -0.30], [0.32, 0.30]].forEach(([xo, zo]) => {
-      const w = new THREE.Mesh(trackGeo, trackMat);
-      w.rotation.z = Math.PI / 2;
-      w.position.set(xo, -0.30, zo);
-      machGrp.add(w);
-    });
-    machGrp.add(body, cabin, boom, drillBit);
-    machGrp.position.set(0.5, -0.85, 1.6);
-    machGrp.rotation.x =  Math.PI * 0.36;
-    machGrp.rotation.z = -0.18;
-    machGrp.castShadow = true;
-    scene.add(machGrp);
-
-    /* ─── PARTICLES ─── */
-    const PCOUNT = 280;
-    const pPos   = new Float32Array(PCOUNT * 3);
-    const pVel   = new Float32Array(PCOUNT);
-    for (let i = 0; i < PCOUNT; i++) {
-      pPos[i * 3]     = (Math.random() - 0.5) * 16;
-      pPos[i * 3 + 1] = (Math.random() - 0.5) * 10;
-      pPos[i * 3 + 2] = Math.random() * 5 - 1;
-      pVel[i]         = 0.003 + Math.random() * 0.004;
-    }
-    const pGeo = new THREE.BufferGeometry();
-    pGeo.setAttribute("position", new THREE.BufferAttribute(pPos, 3));
-    const pMat = new THREE.PointsMaterial({ color: 0x88bb88, size: 0.045, transparent: true, opacity: 0.35 });
-    scene.add(new THREE.Points(pGeo, pMat));
-
-    /* ─── GROUND GRID ─── */
-    const gridHelper = new THREE.GridHelper(24, 28, 0x1c4a18, 0x0d2010);
-    gridHelper.position.set(0, -4.5, 0);
-    gridHelper.material.transparent = true;
-    gridHelper.material.opacity = 0.35;
-    scene.add(gridHelper);
-
-    /* ─── ANIMATE ─── */
-    let frame = 0;
-    let animId;
-    const pPosAttr = pGeo.attributes.position;
-
-    const tick = () => {
-      animId = requestAnimationFrame(tick);
-      frame++;
-
-      const t = frame * 0.0025;
-      camera.position.x = Math.sin(t) * 10.5;
-      camera.position.z = Math.cos(t) * 10.5;
-      camera.position.y = 2.5 + Math.sin(t * 0.4) * 0.8;
-      camera.lookAt(0, -0.5, 0);
-
-      fpLight.intensity = 3.5 + Math.sin(frame * 0.06) * 1.2;
-      fpMat.emissiveIntensity = 0.75 + Math.sin(frame * 0.06) * 0.3;
-
-      for (let i = 0; i < PCOUNT; i++) {
-        pPosAttr.setY(i, pPosAttr.getY(i) + pVel[i]);
-        if (pPosAttr.getY(i) > 5) pPosAttr.setY(i, -5);
-      }
-      pPosAttr.needsUpdate = true;
-
-      machGrp.rotation.y = Math.sin(frame * 0.008) * 0.06;
-
-      renderer.render(scene, camera);
+    /* ── canvas sizing ── */
+    const resize = () => {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      canvas.width  = w;
+      canvas.height = h;
+      canvas.style.width  = w + "px";
+      canvas.style.height = h + "px";
     };
-    tick();
+    resize();
+    window.addEventListener("resize", resize);
 
-    const onResize = () => {
-      const w = el.clientWidth;
-      const h = el.clientHeight;
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
-    };
-    window.addEventListener("resize", onResize);
-
-      return () => {
-        cancelAnimationFrame(animId);
-        window.removeEventListener("resize", onResize);
-        renderer.dispose();
-        if (el && renderer.domElement && el.contains(renderer.domElement)) el.removeChild(renderer.domElement);
+    /* ─────────────────────────────────────────────
+       COORDINATE SYSTEM:
+       Camera at (camX, camY, -dist), looking in +Z
+       Objects at z = 0..12  (in front of camera)
+       dz = obj.z - camZ → positive → visible
+    ───────────────────────────────────────────── */
+    const project = (x, y, z, camX, camY, rotY) => {
+      const DIST = 14;
+      const dx = x - camX;
+      const dy = y - camY;
+      const dz = z - (-DIST);           /* camZ = -DIST, so dz = z + DIST */
+      /* rotate around Y */
+      const rx =  dx * Math.cos(rotY) + dz * Math.sin(rotY);
+      const ry =  dy;
+      const rz = -dx * Math.sin(rotY) + dz * Math.cos(rotY);
+      if (rz < 0.5) return null;
+      const W = canvas.width, H = canvas.height;
+      const fov = Math.min(W, H) * 0.72;
+      return {
+        sx: W * 0.5 + rx * fov / rz,
+        sy: H * 0.5 - ry * fov / rz,
+        sc: fov / rz
       };
-    } // end initScene
+    };
+
+    /* ── slope mesh  (z: 2..10, tilted by varying y) ── */
+    const COLS = 20, ROWS = 16;
+    const sv = [];
+    for (let r = 0; r <= ROWS; r++) {
+      for (let c = 0; c <= COLS; c++) {
+        const u = c / COLS, v = r / ROWS;
+        const wx = (u - 0.5) * 18;
+        const wz = 3 + v * 8;                    /* z: 3 .. 11 — all positive */
+        /* tilt: slope rises toward viewer (low r = high y) */
+        const tilt = (1 - v) * 5.5;
+        const nx = wx * 0.22, nv2 = v * 3.5;
+        const noise =
+          Math.sin(nx * 1.4) * Math.cos(nv2 * 1.8) * 0.42 +
+          Math.sin(nx * 3.1 + 0.9) * Math.sin(nv2 * 2.5 + 1.2) * 0.22 +
+          Math.sin(nx * 6.0 + nv2 * 3.2) * 0.10;
+        sv.push({ x: wx, y: tilt + noise, z: wz });
+      }
+    }
+
+    /* ── fixed point (sky, upper-left) ── */
+    const fp = { x: -7.5, y: 7.0, z: 4.0 };
+
+    /* ── anchor positions (on slope surface) ── */
+    const anchorCells = [
+      {c:3,r:4},{c:8,r:5},{c:14,r:3},
+      {c:5,r:9},{c:11,r:8},{c:16,r:10}
+    ];
+    const anchors = anchorCells.map(({c,r}) => {
+      const v = sv[r*(COLS+1)+c];
+      return { x: v.x, y: v.y + 0.15, z: v.z };
+    });
+
+    /* ── machine (on slope) ── */
+    const mv = sv[9*(COLS+1)+10];
+    const mach = { x: mv.x + 0.3, y: mv.y + 0.32, z: mv.z + 0.15 };
+
+    /* ── particles ── */
+    const parts = Array.from({length:140}, () => ({
+      x: (Math.random()-0.5)*22,
+      y: (Math.random()-0.5)*14,
+      z: Math.random()*12,
+      vy: 0.004 + Math.random()*0.005
+    }));
+
+    /* ─── DRAW ─── */
+    const draw = () => {
+      animId = requestAnimationFrame(draw);
+      frame++;
+      const W = canvas.width, H = canvas.height;
+      const t = frame * 0.0025;
+      const camX = Math.sin(t * 0.7) * 1.8;
+      const camY = 1.8 + Math.sin(t * 0.28) * 0.5;
+      const rotY = Math.sin(t * 0.4) * 0.22;
+      const P = (x,y,z) => project(x, y, z, camX, camY, rotY);
+
+      /* background */
+      ctx.fillStyle = "#030e07";
+      ctx.fillRect(0, 0, W, H);
+
+      /* subtle vignette */
+      const vig = ctx.createRadialGradient(W*0.5,H*0.5,H*0.1,W*0.5,H*0.5,H*0.78);
+      vig.addColorStop(0,"rgba(0,0,0,0)");
+      vig.addColorStop(1,"rgba(0,0,0,0.65)");
+      ctx.fillStyle = vig;
+      ctx.fillRect(0,0,W,H);
+
+      /* ── slope quads (back-to-front: high r first) ── */
+      for (let r = ROWS-1; r >= 0; r--) {
+        for (let c = 0; c < COLS; c++) {
+          const v0=sv[ r    *(COLS+1)+c];
+          const v1=sv[ r    *(COLS+1)+c+1];
+          const v2=sv[(r+1) *(COLS+1)+c+1];
+          const v3=sv[(r+1) *(COLS+1)+c];
+          const p0=P(v0.x,v0.y,v0.z), p1=P(v1.x,v1.y,v1.z);
+          const p2=P(v2.x,v2.y,v2.z), p3=P(v3.x,v3.y,v3.z);
+          if(!p0||!p1||!p2||!p3) continue;
+          const shade = 0.3 + (r/ROWS)*0.5;
+          const g = Math.floor(shade*72);
+          ctx.fillStyle = "rgb("+Math.floor(g*0.5)+","+g+","+Math.floor(g*0.45)+")";
+          ctx.beginPath();
+          ctx.moveTo(p0.sx,p0.sy); ctx.lineTo(p1.sx,p1.sy);
+          ctx.lineTo(p2.sx,p2.sy); ctx.lineTo(p3.sx,p3.sy);
+          ctx.closePath(); ctx.fill();
+          if((r+c)%3===0){
+            ctx.strokeStyle="rgba(50,100,50,0.12)";
+            ctx.lineWidth=0.5; ctx.stroke();
+          }
+        }
+      }
+
+      /* ── wire ropes to fixed point ── */
+      const fpP = P(fp.x, fp.y, fp.z);
+      if (fpP) {
+        anchors.forEach(a => {
+          const aP = P(a.x, a.y, a.z);
+          if (!aP) return;
+          ctx.beginPath();
+          ctx.moveTo(aP.sx, aP.sy);
+          const mx2 = (aP.sx+fpP.sx)*0.5 + (Math.random()-0.5)*2;
+          const my2 = (aP.sy+fpP.sy)*0.5 + 24;
+          ctx.quadraticCurveTo(mx2, my2, fpP.sx, fpP.sy);
+          ctx.strokeStyle = "rgba(190,155,55,0.80)";
+          ctx.lineWidth = Math.max(0.9, aP.sc*0.018);
+          ctx.stroke();
+        });
+        /* machine wires */
+        [[-0.5,0],[0.5,0],[0,0.3]].forEach(([ox,oz])=>{
+          const mp = P(mach.x+ox, mach.y+0.4, mach.z+oz);
+          if (!mp) return;
+          ctx.beginPath();
+          ctx.moveTo(mp.sx, mp.sy);
+          ctx.quadraticCurveTo((mp.sx+fpP.sx)*0.5,(mp.sy+fpP.sy)*0.5+10,fpP.sx,fpP.sy);
+          ctx.strokeStyle="rgba(230,200,70,0.72)"; ctx.lineWidth=Math.max(0.8,mp.sc*0.015); ctx.stroke();
+        });
+      }
+
+      /* ── anchors ── */
+      anchors.forEach(a => {
+        const aP = P(a.x, a.y, a.z);
+        const aB = P(a.x+0.18, a.y-1.0, a.z-0.35);
+        if (!aP||!aB) return;
+        ctx.beginPath(); ctx.moveTo(aP.sx,aP.sy); ctx.lineTo(aB.sx,aB.sy);
+        ctx.strokeStyle="#1e4025"; ctx.lineWidth=Math.max(2.5,aP.sc*0.058); ctx.stroke();
+        const ps = Math.max(3, aP.sc*0.13);
+        ctx.fillStyle="#2a5030";
+        ctx.fillRect(aP.sx-ps, aP.sy-ps*0.55, ps*2, ps*1.1);
+        ctx.beginPath(); ctx.arc(aP.sx,aP.sy,Math.max(2,aP.sc*0.040),0,Math.PI*2);
+        ctx.fillStyle="#3a7035"; ctx.fill();
+      });
+
+      /* ── drilling machine ── */
+      const mP = P(mach.x, mach.y, mach.z);
+      if (mP) {
+        const s = mP.sc;
+        const mx2=mP.sx, my2=mP.sy;
+        ctx.fillStyle="#111"; ctx.fillRect(mx2-s*0.60,my2+s*0.16,s*1.20,s*0.15);
+        ctx.fillStyle="#2a3820"; ctx.fillRect(mx2-s*0.55,my2-s*0.22,s*1.10,s*0.42);
+        ctx.fillStyle="#334428"; ctx.fillRect(mx2-s*0.50,my2-s*0.44,s*0.40,s*0.25);
+        ctx.beginPath(); ctx.moveTo(mx2+s*0.15,my2-s*0.16); ctx.lineTo(mx2+s*0.72,my2-s*0.60);
+        ctx.strokeStyle="#4a6438"; ctx.lineWidth=Math.max(3,s*0.058); ctx.stroke();
+        ctx.beginPath(); ctx.arc(mx2+s*0.74,my2-s*0.62,Math.max(2,s*0.040),0,Math.PI*2);
+        ctx.fillStyle="rgba(80,210,100,0.75)"; ctx.fill();
+      }
+
+      /* ── fixed point glow ── */
+      if (fpP) {
+        const pulse = 0.72 + Math.sin(frame*0.055)*0.28;
+        const gr = Math.max(8, fpP.sc*0.14)*pulse;
+        const grd = ctx.createRadialGradient(fpP.sx,fpP.sy,0,fpP.sx,fpP.sy,gr*4);
+        grd.addColorStop(0,"rgba(34,255,85,0.95)");
+        grd.addColorStop(0.35,"rgba(34,255,85,0.40)");
+        grd.addColorStop(1,"rgba(34,255,85,0)");
+        ctx.fillStyle=grd; ctx.beginPath();
+        ctx.arc(fpP.sx,fpP.sy,gr*4,0,Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(fpP.sx,fpP.sy,gr,0,Math.PI*2);
+        ctx.fillStyle="#22ff55"; ctx.fill();
+      }
+
+      /* ── particles ── */
+      parts.forEach(p => {
+        p.y += p.vy; if(p.y>8) p.y=-8;
+        const pp = P(p.x,p.y,p.z); if(!pp) return;
+        ctx.beginPath(); ctx.arc(pp.sx,pp.sy,Math.max(0.5,pp.sc*0.010),0,Math.PI*2);
+        ctx.fillStyle="rgba(90,190,100,0.25)"; ctx.fill();
+      });
+    };
+    draw();
 
     return () => {
-      cancelled = true;
-      if (document.head.contains(script)) document.head.removeChild(script);
+      cancelAnimationFrame(animId);
+      window.removeEventListener("resize", resize);
     };
   }, []);
-
-  return <div ref={ref} style={{position:"absolute",inset:0,zIndex:0}}/>;
+  return <canvas ref={cvs} style={{position:"absolute",top:0,left:0,display:"block"}}/>;
 }
-
 
 function S0_Boot() {
   const [phase, setPhase] = useState(0);
