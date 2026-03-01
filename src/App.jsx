@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import * as THREE from "three";
 
 /* ─── Audio ─── */
 let _ac = null;
@@ -280,6 +281,233 @@ function ImageSlot({ label, aspectRatio }) {
 
 /* ═══════════════════ SLIDES ═══════════════════ */
 
+/* ─── ThreeBootScene: 3D 無足場アンカー工法 ─── */
+function ThreeBootScene() {
+  const ref = useRef(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const W = el.clientWidth || 600;
+    const H = el.clientHeight || 800;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x060f08);
+    scene.fog = new THREE.FogExp2(0x060f08, 0.055);
+
+    const camera = new THREE.PerspectiveCamera(52, W / H, 0.1, 120);
+    camera.position.set(4, 2.5, 10);
+    camera.lookAt(0, -0.5, 0);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(W, H);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    el.appendChild(renderer.domElement);
+
+    /* ─── LIGHTS ─── */
+    scene.add(new THREE.AmbientLight(0x0d2010, 1.2));
+    const sun = new THREE.DirectionalLight(0xfff4e0, 2.2);
+    sun.position.set(6, 10, 4);
+    sun.castShadow = true;
+    sun.shadow.mapSize.width = 1024;
+    sun.shadow.mapSize.height = 1024;
+    scene.add(sun);
+    const fill = new THREE.DirectionalLight(0x4488cc, 0.4);
+    fill.position.set(-6, 3, 5);
+    scene.add(fill);
+
+    /* ─── SLOPE ─── */
+    const slopeGeo = new THREE.PlaneGeometry(22, 14, 60, 42);
+    const posAttr = slopeGeo.attributes.position;
+    for (let i = 0; i < posAttr.count; i++) {
+      const x = posAttr.getX(i);
+      const y = posAttr.getY(i);
+      const d =
+        Math.sin(x * 1.4) * Math.cos(y * 1.9) * 0.18 +
+        Math.sin(x * 3.1 + 0.8) * Math.sin(y * 2.7 + 1.2) * 0.10 +
+        Math.sin(x * 5.8 + y * 3.3) * 0.05 +
+        Math.sin(x * 9.2 - y * 6.1) * 0.02;
+      posAttr.setZ(i, d);
+    }
+    slopeGeo.computeVertexNormals();
+    const slopeMat = new THREE.MeshStandardMaterial({
+      color: 0x4a4e44,
+      roughness: 0.96,
+      metalness: 0.04,
+    });
+    const slope = new THREE.Mesh(slopeGeo, slopeMat);
+    slope.rotation.x = -Math.PI * 0.36;
+    slope.position.set(0, -1.8, -0.5);
+    slope.receiveShadow = true;
+    scene.add(slope);
+
+    /* ─── FIXED POINT ─── */
+    const fpGeo = new THREE.SphereGeometry(0.22, 20, 20);
+    const fpMat = new THREE.MeshStandardMaterial({
+      color: 0x22ff55,
+      emissive: 0x22ff55,
+      emissiveIntensity: 1.0,
+      roughness: 0.1,
+      metalness: 0.9,
+    });
+    const fixedPt = new THREE.Mesh(fpGeo, fpMat);
+    fixedPt.position.set(-4.0, 4.0, 1.8);
+    scene.add(fixedPt);
+    const fpLight = new THREE.PointLight(0x22ff55, 4, 10);
+    fpLight.position.copy(fixedPt.position);
+    scene.add(fpLight);
+
+    /* ─── ANCHORS ─── */
+    const anchorDefs = [
+      { x: -2.8, y: -0.4, z: 0.6 },
+      { x: -1.2, y: -1.1, z: 0.9 },
+      { x:  0.4, y: -0.7, z: 0.7 },
+      { x:  1.9, y: -1.4, z: 1.0 },
+      { x:  3.3, y: -0.2, z: 0.5 },
+      { x:  0.8, y:  0.6, z: 0.3 },
+    ];
+    const shaftMat = new THREE.MeshStandardMaterial({ color: 0x1a3020, roughness: 0.25, metalness: 0.88 });
+    const plateMat = new THREE.MeshStandardMaterial({ color: 0x253520, roughness: 0.18, metalness: 0.92 });
+    const nutMat   = new THREE.MeshStandardMaterial({ color: 0x1c4a18, roughness: 0.15, metalness: 0.95 });
+
+    anchorDefs.forEach((ap) => {
+      const g = new THREE.Group();
+
+      const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.048, 0.072, 1.5, 8), shaftMat);
+      const plate = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.48, 0.07), plateMat);
+      plate.position.y = 0.77;
+      const nut = new THREE.Mesh(new THREE.CylinderGeometry(0.10, 0.10, 0.10, 6), nutMat);
+      nut.position.y = 0.82;
+
+      shaft.castShadow = true;
+      plate.castShadow = true;
+
+      g.add(shaft, plate, nut);
+      g.position.set(ap.x, ap.y, ap.z);
+      g.rotation.x = Math.PI * 0.36;
+      g.rotation.z = (Math.random() - 0.5) * 0.12;
+      scene.add(g);
+    });
+
+    /* ─── WIRE ROPES ─── */
+    const wireMat = new THREE.MeshStandardMaterial({ color: 0x9a7a38, roughness: 0.35, metalness: 0.65 });
+    anchorDefs.forEach((ap) => {
+      const start = new THREE.Vector3(ap.x, ap.y + 0.8, ap.z + 0.15);
+      const end   = fixedPt.position.clone();
+      const sag   = new THREE.Vector3(
+        (start.x + end.x) / 2 + (Math.random() - 0.5) * 0.5,
+        (start.y + end.y) / 2 - 0.4,
+        (start.z + end.z) / 2
+      );
+      const curve  = new THREE.CatmullRomCurve3([start, sag, end]);
+      const tubeGeo = new THREE.TubeGeometry(curve, 24, 0.020, 7, false);
+      scene.add(new THREE.Mesh(tubeGeo, wireMat));
+    });
+
+    /* ─── DRILLING MACHINE ─── */
+    const machGrp  = new THREE.Group();
+    const bodyMat  = new THREE.MeshStandardMaterial({ color: 0x2a3820, roughness: 0.55, metalness: 0.45 });
+    const trackMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.85 });
+    const detMat   = new THREE.MeshStandardMaterial({ color: 0x334428, roughness: 0.4, metalness: 0.6 });
+
+    const body = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.58, 0.55), bodyMat);
+    const cabin = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.32, 0.40), detMat);
+    cabin.position.set(-0.28, 0.43, 0);
+    const boom = new THREE.Mesh(new THREE.CylinderGeometry(0.038, 0.052, 1.1, 8), detMat);
+    boom.rotation.z = -Math.PI * 0.30;
+    boom.position.set(0.42, 0.42, 0.08);
+    const drillBit = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.008, 0.22, 8), nutMat);
+    drillBit.rotation.z = -Math.PI * 0.30;
+    drillBit.position.set(0.88, 0.02, 0.08);
+
+    const trackGeo = new THREE.CylinderGeometry(0.145, 0.145, 0.10, 14);
+    [[-0.32, -0.30], [-0.32, 0.30], [0.32, -0.30], [0.32, 0.30]].forEach(([xo, zo]) => {
+      const w = new THREE.Mesh(trackGeo, trackMat);
+      w.rotation.z = Math.PI / 2;
+      w.position.set(xo, -0.30, zo);
+      machGrp.add(w);
+    });
+    machGrp.add(body, cabin, boom, drillBit);
+    machGrp.position.set(0.5, -0.85, 1.6);
+    machGrp.rotation.x =  Math.PI * 0.36;
+    machGrp.rotation.z = -0.18;
+    machGrp.castShadow = true;
+    scene.add(machGrp);
+
+    /* ─── PARTICLES ─── */
+    const PCOUNT = 280;
+    const pPos   = new Float32Array(PCOUNT * 3);
+    const pVel   = new Float32Array(PCOUNT);
+    for (let i = 0; i < PCOUNT; i++) {
+      pPos[i * 3]     = (Math.random() - 0.5) * 16;
+      pPos[i * 3 + 1] = (Math.random() - 0.5) * 10;
+      pPos[i * 3 + 2] = Math.random() * 5 - 1;
+      pVel[i]         = 0.003 + Math.random() * 0.004;
+    }
+    const pGeo = new THREE.BufferGeometry();
+    pGeo.setAttribute("position", new THREE.BufferAttribute(pPos, 3));
+    const pMat = new THREE.PointsMaterial({ color: 0x88bb88, size: 0.045, transparent: true, opacity: 0.35 });
+    scene.add(new THREE.Points(pGeo, pMat));
+
+    /* ─── GROUND GRID ─── */
+    const gridHelper = new THREE.GridHelper(24, 28, 0x1c4a18, 0x0d2010);
+    gridHelper.position.set(0, -4.5, 0);
+    gridHelper.material.transparent = true;
+    gridHelper.material.opacity = 0.35;
+    scene.add(gridHelper);
+
+    /* ─── ANIMATE ─── */
+    let frame = 0;
+    let animId;
+    const pPosAttr = pGeo.attributes.position;
+
+    const tick = () => {
+      animId = requestAnimationFrame(tick);
+      frame++;
+
+      const t = frame * 0.0025;
+      camera.position.x = Math.sin(t) * 10.5;
+      camera.position.z = Math.cos(t) * 10.5;
+      camera.position.y = 2.5 + Math.sin(t * 0.4) * 0.8;
+      camera.lookAt(0, -0.5, 0);
+
+      fpLight.intensity = 3.5 + Math.sin(frame * 0.06) * 1.2;
+      fpMat.emissiveIntensity = 0.75 + Math.sin(frame * 0.06) * 0.3;
+
+      for (let i = 0; i < PCOUNT; i++) {
+        pPosAttr.setY(i, pPosAttr.getY(i) + pVel[i]);
+        if (pPosAttr.getY(i) > 5) pPosAttr.setY(i, -5);
+      }
+      pPosAttr.needsUpdate = true;
+
+      machGrp.rotation.y = Math.sin(frame * 0.008) * 0.06;
+
+      renderer.render(scene, camera);
+    };
+    tick();
+
+    const onResize = () => {
+      const w = el.clientWidth;
+      const h = el.clientHeight;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    };
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener("resize", onResize);
+      renderer.dispose();
+      if (el.contains(renderer.domElement)) el.removeChild(renderer.domElement);
+    };
+  }, []);
+
+  return <div ref={ref} style={{position:"absolute",inset:0,zIndex:0}}/>;
+}
+
+
 function S0_Boot() {
   const [phase, setPhase] = useState(0);
   useEffect(() => {
@@ -290,27 +518,30 @@ function S0_Boot() {
     return () =>{clearTimeout(t1);clearTimeout(t2);clearTimeout(t3);};
   },[]);
   return (
-    <Shell>
-      <div style={{textAlign:"center",display:"flex",flexDirection:"column",alignItems:"center",gap:"clamp(1.5rem,5vw,2.5rem)"}}>
-        <div style={{opacity:phase>=1?0.55:0,transition:"opacity .8s",display:"flex",gap:3,alignItems:"flex-end",marginBottom:"-1rem"}}>
+    <div style={{position:"relative",height:"100%",overflow:"hidden",background:"#060f08"}}>
+      <ThreeBootScene/>
+      {/* gradient overlay for text readability */}
+      <div style={{position:"absolute",inset:0,zIndex:1,background:"linear-gradient(to bottom,rgba(6,15,8,0.35) 0%,rgba(6,15,8,0.15) 40%,rgba(6,15,8,0.55) 100%)",pointerEvents:"none"}}/>
+      <div style={{position:"absolute",inset:0,zIndex:2,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:"clamp(1.2rem,4vw,2rem)",textAlign:"center",padding:"clamp(1rem,4vw,2rem)"}}>
+        <div style={{opacity:phase>=1?0.7:0,transition:"opacity .8s",display:"flex",gap:3,alignItems:"flex-end"}}>
           {[16,22,28,34,28,22,16].map((h,i)=>(
-            <div key={i} style={{width:3,height:h,background:"linear-gradient(to top,#3a6b35,#5a9a50)",borderRadius:"2px 2px 0 0"}}/>
+            <div key={i} style={{width:3,height:h,background:"linear-gradient(to top,#22ff55,#88ffaa)",borderRadius:"2px 2px 0 0",boxShadow:"0 0 6px #22ff5588"}}/>
           ))}
         </div>
-        <div style={{fontFamily:V,fontSize:"clamp(.78rem,2.8vw,.9rem)",color:"rgba(28,74,24,.4)",letterSpacing:".3em",opacity:phase>=1?1:0,transition:"opacity .6s"}}>
+        <div style={{fontFamily:V,fontSize:"clamp(.72rem,2.2vw,.88rem)",color:"rgba(100,220,120,0.65)",letterSpacing:".3em",opacity:phase>=1?1:0,transition:"opacity .6s"}}>
           VISTA ANCHOR SYSTEM
         </div>
-        <div style={{fontFamily:VB,fontSize:"clamp(1.9rem,5vw,6rem)",color:C.text,fontWeight:700,lineHeight:1.15,opacity:phase>=2?1:0,transition:"opacity .8s,transform .8s",transform:phase>=2?"translateY(0)":"translateY(14px)"}}>
-          現場に入れない場所、<br/><span style={{color:C.forest}}>ありませんか？</span>
+        <div style={{fontFamily:VB,fontSize:"clamp(1.9rem,5vw,6rem)",color:"#e8f4e8",fontWeight:700,lineHeight:1.15,opacity:phase>=2?1:0,transition:"opacity .8s,transform .8s",transform:phase>=2?"translateY(0)":"translateY(14px)",textShadow:"0 2px 24px rgba(0,0,0,0.6)"}}>
+          現場に入れない場所、<br/><span style={{color:"#4ade80",textShadow:"0 0 30px rgba(74,222,128,0.5)"}}>ありませんか？</span>
         </div>
         {phase>=3 && (
-          <div style={{fontFamily:VB,color:"rgba(93,117,88,.5)",fontSize:"clamp(.75rem,3vw,.85rem)",letterSpacing:".06em",display:"flex",alignItems:"center",gap:".75rem",animation:"fadeIn .8s ease"}}>
-            <span style={{animation:"blink 1.5s step-end infinite",color:C.forest}}>▶</span>
+          <div style={{fontFamily:VB,color:"rgba(180,220,180,0.6)",fontSize:"clamp(.75rem,2.5vw,.88rem)",letterSpacing:".06em",display:"flex",alignItems:"center",gap:".75rem",animation:"fadeIn .8s ease"}}>
+            <span style={{animation:"blink 1.5s step-end infinite",color:"#4ade80"}}>▶</span>
             スワイプ または NEXT をタップ
           </div>
         )}
       </div>
-    </Shell>
+    </div>
   );
 }
 
