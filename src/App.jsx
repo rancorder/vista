@@ -142,7 +142,7 @@ function ForestBg() {
 function Shell({ children }) {
   return (
     <div style={{height:"100%",overflowY:"auto",overflowX:"hidden",WebkitOverflowScrolling:"touch",boxSizing:"border-box"}}>
-      <div style={{minHeight:"100%",padding:"clamp(1.5rem,5vw,2rem) clamp(1.5rem,6vw,5vw)",display:"flex",flexDirection:"column",justifyContent:"center",boxSizing:"border-box"}}>
+      <div style={{minHeight:"100%",padding:"clamp(1.5rem,4vw,4rem) clamp(2rem,8vw,10vw)",display:"flex",flexDirection:"column",justifyContent:"center",boxSizing:"border-box"}}>
         {children}
       </div>
     </div>
@@ -168,7 +168,7 @@ function WallCard({ num, title, detail, revealed, onReveal }) {
           {String(num).padStart(2,"0")}
         </div>
         <div style={{flex:1}}>
-          <div style={{fontFamily:VB,fontSize:"clamp(1rem,4vw,1.3rem)",color:revealed?C.text:C.sage,fontWeight:700,lineHeight:1.3,transition:"color .3s"}}>{title}</div>
+          <div style={{fontFamily:VB,fontSize:"clamp(1rem,2.5vw,1.6rem)",color:revealed?C.text:C.sage,fontWeight:700,lineHeight:1.3,transition:"color .3s"}}>{title}</div>
           {revealed && <div style={{fontFamily:VB,fontSize:"clamp(.82rem,3vw,.95rem)",color:C.muted,lineHeight:1.75,marginTop:".5rem",animation:"fadeIn .4s ease",fontWeight:500}}>{detail}</div>}
         </div>
         <div style={{fontFamily:V,fontSize:".72rem",color:"rgba(28,74,24,.22)",flexShrink:0,transition:"transform .3s",transform:revealed?"rotate(90deg)":"none"}}>▶</div>
@@ -185,14 +185,14 @@ function AccordionRow({ icon, title, sub, detail, benefit, color, open, onToggle
       <button onClick={()=>{sfxSelect();onToggle();}} style={{width:"100%",textAlign:"left",background:open?"rgba(28,74,24,.05)":C.surface,border:"1px solid "+(open?"rgba(28,74,24,.28)":"rgba(28,74,24,.1)"),padding:"clamp(.8rem,3vw,1.1rem) clamp(.9rem,3.5vw,1.3rem)",display:"flex",alignItems:"center",gap:"clamp(.6rem,2vw,1rem)",cursor:"pointer",transition:"all .2s",WebkitTapHighlightColor:"transparent",boxShadow:open?"none":"0 1px 3px rgba(28,74,24,.05)"}}>
         <div style={{fontSize:"clamp(1.1rem,4vw,1.4rem)",flexShrink:0}}>{icon}</div>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontFamily:VB,fontSize:"clamp(1rem,3.8vw,1.25rem)",color:open?c:C.text,fontWeight:700,lineHeight:1.2}}>{title}</div>
+          <div style={{fontFamily:VB,fontSize:"clamp(1rem,2.5vw,1.6rem)",color:open?c:C.text,fontWeight:700,lineHeight:1.2}}>{title}</div>
           {sub && <div style={{fontFamily:V,fontSize:"clamp(.62rem,2vw,.72rem)",color:C.sage,marginTop:".2rem"}}>{sub}</div>}
         </div>
         <div style={{fontFamily:V,color:open?c:"rgba(28,74,24,.28)",fontSize:".85rem",flexShrink:0,transition:"transform .2s",transform:open?"rotate(90deg)":"none"}}>▶</div>
       </button>
       {open && (
         <div style={{padding:"clamp(.9rem,3.5vw,1.25rem) clamp(1rem,4vw,1.5rem)",borderLeft:"3px solid "+c,borderRight:"1px solid rgba(28,74,24,.1)",borderBottom:"1px solid rgba(28,74,24,.1)",background:"rgba(28,74,24,.03)",animation:"fadeIn .25s ease"}}>
-          {detail && <div style={{fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.muted,lineHeight:1.85,marginBottom:".75rem",fontWeight:500}}>{detail}</div>}
+          {detail && <div style={{fontFamily:VB,fontSize:"clamp(.85rem,2vw,1.15rem)",color:C.muted,lineHeight:1.85,marginBottom:".75rem",fontWeight:500}}>{detail}</div>}
           {benefit && (
             <div style={{display:"flex",alignItems:"flex-start",gap:".6rem",padding:".65rem .9rem",background:"rgba(28,74,24,.06)",border:"1px solid rgba(28,74,24,.15)"}}>
               <span style={{color:c,fontFamily:V,flexShrink:0,marginTop:".1rem"}}>✓</span>
@@ -223,7 +223,7 @@ function CheckItem({ id, label, sub, checked, onChange }) {
 /* ─── SlopeSVG ─── */
 function SlopeSVG() {
   return (
-    <svg viewBox="0 0 320 160" style={{width:"100%",maxWidth:480,height:"auto",display:"block",margin:"0 auto"}} aria-label="無足場アンカー工法 概念図">
+    <svg viewBox="0 0 320 160" style={{width:"100%",maxWidth:1100,height:"auto",display:"block",margin:"0 auto"}} aria-label="無足場アンカー工法 概念図">
       <defs>
         <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#cfe8d4"/><stop offset="100%" stopColor="#e4f2e6"/>
@@ -300,7 +300,7 @@ function S0_Boot() {
         <div style={{fontFamily:V,fontSize:"clamp(.78rem,2.8vw,.9rem)",color:"rgba(28,74,24,.4)",letterSpacing:".3em",opacity:phase>=1?1:0,transition:"opacity .6s"}}>
           VISTA ANCHOR SYSTEM
         </div>
-        <div style={{fontFamily:VB,fontSize:"clamp(1.9rem,7.5vw,4.5rem)",color:C.text,fontWeight:700,lineHeight:1.15,opacity:phase>=2?1:0,transition:"opacity .8s,transform .8s",transform:phase>=2?"translateY(0)":"translateY(14px)"}}>
+        <div style={{fontFamily:VB,fontSize:"clamp(1.9rem,5vw,6rem)",color:C.text,fontWeight:700,lineHeight:1.15,opacity:phase>=2?1:0,transition:"opacity .8s,transform .8s",transform:phase>=2?"translateY(0)":"translateY(14px)"}}>
           現場に入れない場所、<br/><span style={{color:C.forest}}>ありませんか？</span>
         </div>
         {phase>=3 && (
@@ -328,7 +328,7 @@ function S1_Hearing({ checks, onCheck }) {
   return (
     <Shell>
       <Label>HEARING ── まず、貴社の現場について聞かせてください</Label>
-      <div style={{fontFamily:VB,fontSize:"clamp(1.1rem,4.5vw,1.7rem)",color:C.text,fontWeight:700,lineHeight:1.35,marginBottom:"clamp(.75rem,3vw,1.25rem)"}}>
+      <div style={{fontFamily:VB,fontSize:"clamp(1.1rem,3vw,2.4rem)",color:C.text,fontWeight:700,lineHeight:1.35,marginBottom:"clamp(.75rem,3vw,1.25rem)"}}>
         当てはまるものを<br/><span style={{color:C.forest}}>タップしてください。</span>
       </div>
       {count>0&&<div style={{fontFamily:V,fontSize:"clamp(.62rem,2vw,.72rem)",color:C.forest,letterSpacing:".1em",marginBottom:"clamp(.5rem,2vw,.75rem)",animation:"fadeIn .3s ease"}}>{count}項目 確認 ── この内容をもとに説明します</div>}
@@ -350,7 +350,7 @@ function S2_Pain() {
   return (
     <Shell>
       <Label>PAIN ── 現場が抱える3つの制約</Label>
-      <div style={{fontFamily:VB,fontSize:"clamp(1.3rem,5.5vw,2.2rem)",color:C.text,fontWeight:700,lineHeight:1.3,marginBottom:"clamp(1rem,4vw,1.75rem)"}}>
+      <div style={{fontFamily:VB,fontSize:"clamp(1.3rem,3.5vw,3rem)",color:C.text,fontWeight:700,lineHeight:1.3,marginBottom:"clamp(1rem,4vw,1.75rem)"}}>
         足場が変えられない、<br/><span style={{color:C.danger}}>3つの壁。</span>
       </div>
       <div style={{display:"flex",flexDirection:"column",gap:"clamp(.4rem,1.5vw,.6rem)"}}>
@@ -374,7 +374,7 @@ function S3_Solution() {
   return (
     <Shell>
       <Label>SOLUTION ── 足場を"消す"特許工法</Label>
-      <div style={{fontFamily:VB,fontSize:"clamp(1.5rem,6vw,3rem)",color:C.text,fontWeight:700,lineHeight:1.25,marginBottom:"clamp(.75rem,3vw,1.25rem)"}}>
+      <div style={{fontFamily:VB,fontSize:"clamp(1.5rem,4vw,4rem)",color:C.text,fontWeight:700,lineHeight:1.25,marginBottom:"clamp(.75rem,3vw,1.25rem)"}}>
         ワイヤーで機械を<br/>斜面に固定する。<br/><span style={{color:C.forest}}>それだけで、足場がいらない。</span>
       </div>
       {/* 2×2 photo grid */}
@@ -445,7 +445,7 @@ function S4_Position() {
       )}
       {step===0&&(
         <div style={{animation:"fadeIn .4s ease"}}>
-          <div style={{fontFamily:VB,fontSize:"clamp(1.2rem,5vw,2rem)",color:C.text,fontWeight:700,lineHeight:1.35,marginBottom:"clamp(1rem,4vw,1.5rem)"}}>
+          <div style={{fontFamily:VB,fontSize:"clamp(1.2rem,3vw,2.8rem)",color:C.text,fontWeight:700,lineHeight:1.35,marginBottom:"clamp(1rem,4vw,1.5rem)"}}>
             「なぜ無足場なのか」を<br/><span style={{color:C.forest}}>一緒に確認します。</span>
           </div>
           <button onClick={()=>{sfxSelect();setStep(1);}} style={{width:"100%",border:"1px solid rgba(28,74,24,.28)",background:"rgba(28,74,24,.06)",color:C.forest,fontFamily:V,fontSize:"clamp(.85rem,3.2vw,1rem)",padding:"clamp(.85rem,3.5vw,1.1rem)",cursor:"pointer",letterSpacing:".1em",WebkitTapHighlightColor:"transparent",transition:"all .2s"}}>
@@ -456,7 +456,7 @@ function S4_Position() {
       {curQ&&(
         <div key={step} style={{animation:"fadeIn .35s ease"}}>
           <div style={{fontFamily:V,fontSize:"clamp(.6rem,2vw,.7rem)",color:"rgba(28,74,24,.33)",letterSpacing:".15em",marginBottom:".6rem"}}>Q{step} / 4</div>
-          <div style={{fontFamily:VB,fontSize:"clamp(1.2rem,5vw,1.8rem)",color:C.text,fontWeight:700,lineHeight:1.4,marginBottom:"clamp(.4rem,1.5vw,.6rem)"}}>{curQ.q}</div>
+          <div style={{fontFamily:VB,fontSize:"clamp(1.2rem,3vw,2.5rem)",color:C.text,fontWeight:700,lineHeight:1.4,marginBottom:"clamp(.4rem,1.5vw,.6rem)"}}>{curQ.q}</div>
           <div style={{fontFamily:VB,fontSize:"clamp(.78rem,3vw,.9rem)",color:"rgba(93,117,88,.52)",marginBottom:"clamp(1.25rem,5vw,2rem)",fontWeight:500}}>{curQ.hint}</div>
           <div style={{display:"flex",flexDirection:"column",gap:"clamp(.5rem,2vw,.75rem)"}}>
             <button onClick={()=>handle("yes",curQ.yes.next)} style={{border:"1px solid rgba(28,74,24,.28)",background:"rgba(28,74,24,.06)",color:C.forest,fontFamily:VB,fontSize:"clamp(1rem,4vw,1.3rem)",fontWeight:700,padding:"clamp(.9rem,4vw,1.25rem) clamp(1rem,4vw,1.5rem)",cursor:"pointer",textAlign:"left",display:"flex",alignItems:"center",justifyContent:"space-between",WebkitTapHighlightColor:"transparent",transition:"all .2s"}}>
@@ -481,7 +481,7 @@ function S4_Position() {
             <Corners color={RC[result].color} size={20} t={2}/>
             <div style={{fontFamily:V,fontSize:"clamp(.62rem,2vw,.72rem)",color:RC[result].color+"90",letterSpacing:".15em",marginBottom:".6rem"}}>RESULT</div>
             <div style={{fontFamily:VB,fontSize:"clamp(1.2rem,5vw,1.8rem)",color:RC[result].color,fontWeight:700,lineHeight:1.3,marginBottom:".75rem"}}>{RC[result].title}</div>
-            <div style={{fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.muted,lineHeight:1.85,fontWeight:500}}>{RC[result].body}</div>
+            <div style={{fontFamily:VB,fontSize:"clamp(.85rem,2vw,1.15rem)",color:C.muted,lineHeight:1.85,fontWeight:500}}>{RC[result].body}</div>
           </div>
           <div style={{border:"1px solid rgba(93,117,88,.15)",background:C.surface,padding:"clamp(.75rem,3vw,1rem)",boxShadow:"0 1px 4px rgba(28,74,24,.04)"}}>
             <div style={{fontFamily:V,fontSize:"clamp(.6rem,2vw,.7rem)",color:"rgba(93,117,88,.38)",letterSpacing:".15em",marginBottom:".6rem"}}>SD工法 vs 無足場アンカー（ビスタ）── 本質の差</div>
@@ -521,7 +521,7 @@ function S5_Strength() {
   return (
     <Shell>
       <Label>STRENGTH ── 他社ができない現場を、できる理由</Label>
-      <div style={{fontFamily:VB,fontSize:"clamp(1.2rem,5vw,2rem)",color:C.text,fontWeight:700,lineHeight:1.3,marginBottom:"clamp(1rem,4vw,1.5rem)"}}>
+      <div style={{fontFamily:VB,fontSize:"clamp(1.2rem,3vw,2.8rem)",color:C.text,fontWeight:700,lineHeight:1.3,marginBottom:"clamp(1rem,4vw,1.5rem)"}}>
         <span style={{color:C.forest}}>3つの技術優位</span>が<br/>選ばれる理由です。
       </div>
       <div style={{display:"flex",flexDirection:"column",gap:"clamp(.4rem,1.5vw,.6rem)"}}>
@@ -540,7 +540,7 @@ function S6_Proof() {
   return (
     <Shell>
       <Label>PROOF ── 緊急・難現場で選ばれた実績</Label>
-      <div style={{fontFamily:VB,fontSize:"clamp(1.2rem,5vw,2rem)",color:C.text,fontWeight:700,lineHeight:1.3,marginBottom:"clamp(1rem,4vw,1.5rem)"}}>
+      <div style={{fontFamily:VB,fontSize:"clamp(1.2rem,3vw,2.8rem)",color:C.text,fontWeight:700,lineHeight:1.3,marginBottom:"clamp(1rem,4vw,1.5rem)"}}>
         「他社が手を挙げない現場」で<br/><span style={{color:C.forest}}>呼ばれます。</span>
       </div>
       <div style={{display:"flex",flexDirection:"column",gap:"clamp(.5rem,2vw,.75rem)"}}>
@@ -549,7 +549,7 @@ function S6_Proof() {
             <div style={{display:"flex",alignItems:"center",gap:".6rem",marginBottom:".5rem"}}>
               <div style={{fontFamily:V,fontSize:"clamp(.6rem,2vw,.7rem)",color:r.color,border:"1px solid "+r.color+"45",padding:".2rem .5rem",letterSpacing:".08em"}}>{r.tag}</div>
             </div>
-            <div style={{fontFamily:VB,fontSize:"clamp(1rem,3.8vw,1.2rem)",color:C.text,fontWeight:700,lineHeight:1.3,marginBottom:".4rem"}}>{r.title}</div>
+            <div style={{fontFamily:VB,fontSize:"clamp(1rem,2.5vw,1.5rem)",color:C.text,fontWeight:700,lineHeight:1.3,marginBottom:".4rem"}}>{r.title}</div>
             <div style={{fontFamily:VB,fontSize:"clamp(.8rem,3vw,.95rem)",color:C.muted,lineHeight:1.75,fontWeight:500}}>{r.body}</div>
             <div style={{marginTop:".75rem"}}><ImageSlot label={r.title+" 現場写真"} aspectRatio="40%"/></div>
           </div>
@@ -569,7 +569,7 @@ function S7_FAQ() {
   return (
     <Shell>
       <Label>FAQ ── よく聞かれること、先にお答えします</Label>
-      <div style={{fontFamily:VB,fontSize:"clamp(1.1rem,4.5vw,1.7rem)",color:C.text,fontWeight:700,lineHeight:1.35,marginBottom:"clamp(1rem,4vw,1.5rem)"}}>
+      <div style={{fontFamily:VB,fontSize:"clamp(1.1rem,3vw,2.4rem)",color:C.text,fontWeight:700,lineHeight:1.35,marginBottom:"clamp(1rem,4vw,1.5rem)"}}>
         懸念は全部、<br/><span style={{color:C.forest}}>想定済みです。</span>
       </div>
       <div style={{display:"flex",flexDirection:"column",gap:"clamp(.4rem,1.5vw,.6rem)"}}>
@@ -578,13 +578,13 @@ function S7_FAQ() {
             <button onClick={()=>{sfxSelect();setOpen(open===i?null:i);}} style={{width:"100%",textAlign:"left",cursor:"pointer",background:open===i?"rgba(28,74,24,.05)":C.surface,border:"1px solid "+(open===i?"rgba(28,74,24,.28)":"rgba(28,74,24,.1)"),padding:"clamp(.85rem,3.5vw,1.1rem) clamp(1rem,4vw,1.3rem)",WebkitTapHighlightColor:"transparent",transition:"all .2s",boxShadow:open===i?"none":"0 1px 3px rgba(28,74,24,.04)"}}>
               <div style={{display:"flex",alignItems:"center",gap:".75rem"}}>
                 <span style={{fontFamily:V,fontSize:"clamp(.7rem,2.5vw,.8rem)",color:C.forest,flexShrink:0,fontWeight:700}}>Q.</span>
-                <span style={{fontFamily:VB,fontSize:"clamp(.9rem,3.5vw,1.1rem)",color:open===i?C.text:C.muted,flex:1,lineHeight:1.4,fontWeight:open===i?700:500}}>{f.q}</span>
+                <span style={{fontFamily:VB,fontSize:"clamp(.9rem,2vw,1.3rem)",color:open===i?C.text:C.muted,flex:1,lineHeight:1.4,fontWeight:open===i?700:500}}>{f.q}</span>
                 <span style={{fontFamily:V,color:"rgba(28,74,24,.28)",fontSize:".8rem",flexShrink:0,transition:"transform .2s",transform:open===i?"rotate(90deg)":"none"}}>▶</span>
               </div>
             </button>
             {open===i&&(
               <div style={{padding:"clamp(.85rem,3.5vw,1.1rem) clamp(1rem,4vw,1.3rem)",borderLeft:"3px solid "+C.forest,borderRight:"1px solid rgba(28,74,24,.1)",borderBottom:"1px solid rgba(28,74,24,.1)",background:"rgba(28,74,24,.03)",animation:"fadeIn .25s ease"}}>
-                <div style={{fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.muted,lineHeight:1.85,fontWeight:500}}>
+                <div style={{fontFamily:VB,fontSize:"clamp(.85rem,2vw,1.15rem)",color:C.muted,lineHeight:1.85,fontWeight:500}}>
                   <span style={{color:C.forest,fontFamily:V,fontSize:"clamp(.65rem,2vw,.75rem)",marginRight:".5rem",fontWeight:700}}>A.</span>{f.a}
                 </div>
               </div>
@@ -601,7 +601,7 @@ function S8_Scope() {
   return (
     <Shell>
       <Label>SCOPE ── ビスタができること</Label>
-      <div style={{fontFamily:VB,fontSize:"clamp(1.1rem,4.5vw,1.7rem)",color:C.text,fontWeight:700,lineHeight:1.35,marginBottom:"clamp(1rem,4vw,1.5rem)"}}>
+      <div style={{fontFamily:VB,fontSize:"clamp(1.1rem,3vw,2.4rem)",color:C.text,fontWeight:700,lineHeight:1.35,marginBottom:"clamp(1rem,4vw,1.5rem)"}}>
         <span style={{color:C.forest}}>2軸の強み</span>で、<br/>より多くの現場に対応できます。
       </div>
       <div style={{display:"flex",flexDirection:"column",gap:"clamp(.4rem,1.5vw,.6rem)"}}>
@@ -630,7 +630,7 @@ function S8_Scope() {
                     style={{width:"100%",aspectRatio:"4/3",objectFit:"cover",display:"block",border:"1px solid rgba(28,74,24,.1)"}}/>
                 </div>
               </div>
-              <div style={{fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.muted,lineHeight:1.85,marginBottom:".75rem",fontWeight:500}}>グランドアンカー工・鉄筋挿入工。足場不要のワイヤー緊張方式（特許）により、急斜面・山間部・崩れやすい地盤でも安全・迅速に施工。</div>
+              <div style={{fontFamily:VB,fontSize:"clamp(.85rem,2vw,1.15rem)",color:C.muted,lineHeight:1.85,marginBottom:".75rem",fontWeight:500}}>グランドアンカー工・鉄筋挿入工。足場不要のワイヤー緊張方式（特許）により、急斜面・山間部・崩れやすい地盤でも安全・迅速に施工。</div>
               <div style={{display:"flex",alignItems:"flex-start",gap:".6rem",padding:".65rem .9rem",background:"rgba(28,74,24,.06)",border:"1px solid rgba(28,74,24,.14)"}}>
                 <span style={{color:C.forest,fontFamily:V,flexShrink:0}}>✓</span>
                 <div style={{fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.forest,lineHeight:1.6,fontWeight:600}}>他社が断る現場こそ、ビスタの出番。緊急対応・難工事に対応します。</div>
@@ -662,7 +662,7 @@ function S8_Scope() {
                   <div style={{fontFamily:V,fontSize:"clamp(.6rem,2vw,.7rem)",color:C.sage,marginTop:".2rem",letterSpacing:".08em"}}>YouTube // 木景 施工風景</div>
                 </div>
               </a>
-              <div style={{fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.muted,lineHeight:1.85,marginBottom:".75rem",fontWeight:500}}>木製ガードレール「木景（こかげ）」・木製ガードフェンス・ウッド筋工。性能確認試験に合格した安全性と、景観・環境に配慮した素材を両立。</div>
+              <div style={{fontFamily:VB,fontSize:"clamp(.85rem,2vw,1.15rem)",color:C.muted,lineHeight:1.85,marginBottom:".75rem",fontWeight:500}}>木製ガードレール「木景（こかげ）」・木製ガードフェンス・ウッド筋工。性能確認試験に合格した安全性と、景観・環境に配慮した素材を両立。</div>
               <div style={{display:"flex",alignItems:"flex-start",gap:".6rem",padding:".65rem .9rem",background:"rgba(28,74,24,.06)",border:"1px solid rgba(28,74,24,.14)"}}>
                 <span style={{color:C.wood,fontFamily:V,flexShrink:0}}>✓</span>
                 <div style={{fontFamily:VB,fontSize:"clamp(.85rem,3.2vw,1rem)",color:C.wood,lineHeight:1.6,fontWeight:600}}>SDGs・景観条例エリアの案件、地域材活用のニーズに応えます。</div>
@@ -795,7 +795,7 @@ export default function App() {
       <ForestBg/>
       {/* Desktop centering wrapper */}
       <div style={{position:"fixed",inset:0,zIndex:10,display:"flex",justifyContent:"center",alignItems:"stretch"}}>
-        <div onClick={handleAreaClick} {...swipe} style={{width:"100%",maxWidth:480,height:"100%",display:"flex",flexDirection:"column",position:"relative",boxShadow:"0 0 60px rgba(0,0,0,0.12)",background:C.bg}}>
+        <div onClick={handleAreaClick} {...swipe} style={{width:"100%",maxWidth:1100,height:"100%",display:"flex",flexDirection:"column",position:"relative",boxShadow:"0 0 60px rgba(0,0,0,0.12)",background:C.bg}}>
 
         {/* ── TOP BAR ── */}
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"clamp(.4rem,2vw,.65rem) clamp(.75rem,3vw,1.25rem)",borderBottom:"1px solid rgba(28,74,24,.1)",background:"rgba(244,241,235,.97)",backdropFilter:"blur(8px)",fontFamily:V,fontSize:"clamp(.65rem,2.5vw,.75rem)",color:"rgba(28,74,24,.38)",letterSpacing:".12em",flexShrink:0,zIndex:20,gap:"clamp(.5rem,2vw,1rem)"}}>
