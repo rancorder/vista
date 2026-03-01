@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import * as THREE from "three";
 
 /* ─── Audio ─── */
 let _ac = null;
@@ -281,13 +280,22 @@ function ImageSlot({ label, aspectRatio }) {
 
 /* ═══════════════════ SLIDES ═══════════════════ */
 
-/* ─── ThreeBootScene: 3D 無足場アンカー工法 ─── */
+/* ─── ThreeBootScene: 3D 無足場アンカー工法 (CDN load) ─── */
 function ThreeBootScene() {
   const ref = useRef(null);
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const W = el.clientWidth || 600;
+    let cancelled = false;
+    const script = document.createElement("script");
+    script.src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
+    script.async = true;
+    script.onload = () => { if (!cancelled) initScene(); };
+    document.head.appendChild(script);
+
+    function initScene() {
+      const THREE = window.THREE;
+      const el = ref.current;
+      if (!el || cancelled) return;
+      const W = el.clientWidth || 600;
     const H = el.clientHeight || 800;
 
     const scene = new THREE.Scene();
@@ -496,11 +504,17 @@ function ThreeBootScene() {
     };
     window.addEventListener("resize", onResize);
 
+      return () => {
+        cancelAnimationFrame(animId);
+        window.removeEventListener("resize", onResize);
+        renderer.dispose();
+        if (el && renderer.domElement && el.contains(renderer.domElement)) el.removeChild(renderer.domElement);
+      };
+    } // end initScene
+
     return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener("resize", onResize);
-      renderer.dispose();
-      if (el.contains(renderer.domElement)) el.removeChild(renderer.domElement);
+      cancelled = true;
+      if (document.head.contains(script)) document.head.removeChild(script);
     };
   }, []);
 
